@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspo Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --surface: #141416;
+    --surface2: #1c1c20;
+    --surface3: #242428;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0f0f2;
+    --text2: #9090a0;
+    --text3: #5a5a6a;
+    --accent: #c8f060;
+    --accent2: #a8d040;
+    --accent-dim: rgba(200,240,96,0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 18px;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 24px;
+    height: 58px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: var(--font-head);
+    font-size: 18px; font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+  }
+  .logo span { color: var(--text); }
+  .search-wrap {
+    flex: 1; max-width: 380px;
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%; background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 8px 14px 8px 36px;
+    color: var(--text); font-family: var(--font-body); font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input::placeholder { color: var(--text3); }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-icon {
+    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    color: var(--text3); font-size: 14px; pointer-events: none;
+  }
+  .topbar-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+  .count-badge {
+    background: var(--accent-dim); color: var(--accent);
+    border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 500;
+    font-family: var(--font-head);
+  }
+  .btn-add {
+    background: var(--accent); color: #0d0d0f;
+    border: none; border-radius: var(--radius-sm);
+    padding: 8px 16px; font-family: var(--font-head);
+    font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .btn-add:hover { background: var(--accent2); }
+  .btn-add:active { transform: scale(0.97); }
+
+  /* LAYOUT */
+  .layout {
+    display: flex; flex: 1; overflow: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 20px 0;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+  .sidebar-section { padding: 0 16px; margin-bottom: 6px; }
+  .sidebar-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--text3); text-transform: uppercase;
+    padding: 0 4px; margin-bottom: 6px; font-family: var(--font-head);
+  }
+  .filter-btn {
+    display: flex; align-items: center; gap: 9px;
+    width: 100%; background: transparent; border: none;
+    padding: 7px 8px; border-radius: var(--radius-sm);
+    color: var(--text2); font-family: var(--font-body); font-size: 13px;
+    cursor: pointer; text-align: left;
+    transition: background 0.15s, color 0.15s;
+  }
+  .filter-btn:hover { background: var(--surface2); color: var(--text); }
+  .filter-btn.active { background: var(--accent-dim); color: var(--accent); }
+  .filter-btn .ficon { font-size: 15px; width: 20px; text-align: center; }
+  .filter-btn .fname { flex: 1; }
+  .filter-btn .fcount {
+    font-size: 11px; color: var(--text3);
+    background: var(--surface3); border-radius: 4px;
+    padding: 1px 6px; font-family: var(--font-head);
+  }
+  .filter-btn.active .fcount { background: var(--accent-dim); color: var(--accent); }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 4px 16px; }
+
+  /* MAIN */
+  .main {
+    flex: 1; overflow-y: auto;
+    padding: 24px;
+    background: var(--bg);
+  }
+  .main::-webkit-scrollbar { width: 4px; }
+  .main::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+
+  .toolbar {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .sort-select {
+    background: var(--surface); border: 1px solid var(--border2);
+    color: var(--text2); font-family: var(--font-body); font-size: 12px;
+    border-radius: var(--radius-sm); padding: 6px 10px; outline: none;
+    cursor: pointer;
+  }
+  .view-toggle { display: flex; gap: 4px; margin-left: auto; }
+  .view-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text3); border-radius: 6px; padding: 6px 10px;
+    cursor: pointer; font-size: 13px; transition: all 0.15s;
+  }
+  .view-btn.active, .view-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  .active-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .af-chip {
+    display: flex; align-items: center; gap: 4px;
+    background: var(--surface2); border: 1px solid var(--border2);
+    color: var(--text2); border-radius: 20px; padding: 4px 10px;
+    font-size: 11px;
+  }
+  .af-chip button { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 13px; line-height: 1; padding: 0; }
+
+  /* CARD GRID */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .card-grid.list-view { grid-template-columns: 1fr; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .card.list-view { flex-direction: row; height: 84px; }
+
+  .card-thumb {
+    height: 140px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; position: relative;
+    overflow: hidden;
+  }
+  .card.list-view .card-thumb { width: 84px; height: 84px; }
+  .card-thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+  .thumb-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5));
+  }
+
+  .card-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .card.list-view .card-body { padding: 10px 14px; justify-content: center; }
+  .card-title {
+    font-family: var(--font-head); font-size: 14px; font-weight: 600;
+    color: var(--text); line-height: 1.35;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .card.list-view .card-title { -webkit-line-clamp: 1; font-size: 13px; }
+  .card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .source-badge {
+    font-size: 10px; font-weight: 700; font-family: var(--font-head);
+    padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .cat-badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 10px;
+    color: var(--text2); background: var(--surface2); border: 1px solid var(--border);
+  }
+  .card-notes { font-size: 11px; color: var(--text3); line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .card-footer {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .card.list-view .card-footer { display: none; }
+  .card-url { font-size: 11px; color: var(--text3); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bookmark-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 16px; padding: 2px; line-height: 1;
+    transition: color 0.15s, transform 0.1s;
+  }
+  .bookmark-btn:hover { color: var(--accent); transform: scale(1.2); }
+  .bookmark-btn.bookmarked { color: var(--accent); }
+  .open-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text2); border-radius: 6px; padding: 4px 10px;
+    font-size: 11px; cursor: pointer; text-decoration: none;
+    transition: all 0.15s; font-family: var(--font-body);
+  }
+  .open-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .delete-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 14px; padding: 2px;
+    transition: color 0.15s;
+  }
+  .delete-btn:hover { color: #ff5555; }
+
+  /* Source colors */
+  .src-article { background: rgba(52,211,153,0.15); color: #34d399; }
+  .src-ytchannel { background: rgba(248,113,113,0.15); color: #f87171; }
+  .src-ytvideo { background: rgba(248,113,113,0.15); color: #f87171; }
+  .src-twitter { background: rgba(96,165,250,0.15); color: #60a5fa; }
+  .src-reddit { background: rgba(251,146,60,0.15); color: #fb923c; }
+  .src-instagram { background: rgba(232,121,249,0.15); color: #e879f9; }
+  .src-trend { background: rgba(200,240,96,0.15); color: #c8f060; }
+
+  .thumb-article { background: #0d2e20; }
+  .thumb-ytchannel { background: #2e0d0d; }
+  .thumb-ytvideo { background: #2e0d0d; }
+  .thumb-twitter { background: #0d1e2e; }
+  .thumb-reddit { background: #2e1a0d; }
+  .thumb-instagram { background: #2e0d2e; }
+  .thumb-trend { background: #1e2e0d; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 12px;
+    padding: 80px 20px; text-align: center;
+    color: var(--text3);
+  }
+  .empty-state .e-icon { font-size: 48px; opacity: 0.4; }
+  .empty-state h3 { font-family: var(--font-head); font-size: 18px; color: var(--text2); }
+  .empty-state p { font-size: 13px; max-width: 280px; line-height: 1.6; }
+  .empty-state button {
+    margin-top: 8px; background: var(--accent); color: #0d0d0f;
+    border: none; border-radius: var(--radius-sm); padding: 10px 20px;
+    font-family: var(--font-head); font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+
+  /* MODAL OVERLAY */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    width: 100%; max-width: 540px;
+    max-height: 90vh; overflow-y: auto;
+    padding: 28px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .modal::-webkit-scrollbar { width: 4px; }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-family: var(--font-head); font-size: 18px; font-weight: 700; }
+  .modal-close {
+    background: none; border: none; color: var(--text3);
+    font-size: 20px; cursor: pointer; line-height: 1; padding: 4px;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--text); }
+
+  .form-row { display: flex; flex-direction: column; gap: 6px; }
+  .form-row label { font-size: 12px; color: var(--text2); font-weight: 500; letter-spacing: 0.04em; }
+  .form-row input, .form-row select, .form-row textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    color: var(--text); font-family: var(--font-body); font-size: 13px;
+    outline: none; transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--accent); }
+  .form-row textarea { resize: vertical; min-height: 70px; }
+  .form-row select option { background: var(--surface2); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .btn-cancel {
+    background: transparent; border: 1px solid var(--border2);
+    color: var(--text2); border-radius: var(--radius-sm);
+    padding: 10px 20px; font-family: var(--font-body); font-size: 13px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-cancel:hover { border-color: var(--text2); color: var(--text); }
+  .btn-save {
+    background: var(--accent); color: #0d0d0f;
+    border: none; border-radius: var(--radius-sm);
+    padding: 10px 24px; font-family: var(--font-head);
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-save:hover { background: var(--accent2); }
+
+  /* DETAIL PANEL */
+  .detail-panel {
+    width: 340px; flex-shrink: 0;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+    position: relative;
+  }
+  .detail-panel.open { transform: translateX(0); }
+  .dp-header {
+    padding: 16px 18px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .dp-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; }
+  .dp-close { background: none; border: none; color: var(--text3); font-size: 18px; cursor: pointer; }
+  .dp-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 16px; }
+  .dp-body::-webkit-scrollbar { width: 4px; }
+  .dp-thumb {
+    height: 200px; border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center; font-size: 56px;
+    overflow: hidden; position: relative;
+    background: #000;
+  }
+  .dp-thumb.has-video { height: auto; aspect-ratio: 16/9; min-height: 190px; }
+  .yt-iframe { width: 100%; height: 100%; border: none; display: block; position: absolute; inset: 0; }
+  .dp-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .dp-name { font-family: var(--font-head); font-size: 16px; font-weight: 700; line-height: 1.35; }
+  .dp-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dp-meta { display: flex; flex-direction: column; gap: 6px; }
+  .dp-meta-row { display: flex; gap: 8px; }
+  .dp-meta-label { font-size: 11px; color: var(--text3); width: 60px; flex-shrink: 0; }
+  .dp-meta-val { font-size: 12px; color: var(--text2); flex: 1; word-break: break-all; }
+  .dp-notes-label { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+  .dp-notes { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .dp-actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
+  .dp-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px; border-radius: var(--radius-sm);
+    font-family: var(--font-body); font-size: 13px; cursor: pointer;
+    text-decoration: none; transition: all 0.15s;
+  }
+  .dp-btn.primary { background: var(--accent); color: #0d0d0f; border: none; font-weight: 600; }
+  .dp-btn.primary:hover { background: var(--accent2); }
+  .dp-btn.secondary { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+  .dp-btn.secondary:hover { border-color: var(--border2); background: var(--surface2); }
+  .dp-btn.danger { background: transparent; border: 1px solid rgba(255,85,85,0.3); color: #ff5555; }
+  .dp-btn.danger:hover { background: rgba(255,85,85,0.1); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px);
+    background: var(--surface3); border: 1px solid var(--border2);
+    color: var(--text); border-radius: 8px; padding: 10px 20px;
+    font-size: 13px; font-family: var(--font-body);
+    z-index: 2000; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* EXPORT/IMPORT */
+  .io-row { display: flex; gap: 8px; }
+  .io-btn {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border2);
+    color: var(--text2); border-radius: var(--radius-sm);
+    padding: 8px; font-size: 12px; cursor: pointer; font-family: var(--font-body);
+    transition: all 0.15s; text-align: center;
+  }
+  .io-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* YT thumbnail player */
+  .yt-thumb-player {
+    width: 100%; height: 100%; position: absolute; inset: 0;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+  }
+  .yt-thumb-player img { width: 100%; height: 100%; object-fit: cover; }
+  .yt-play-btn {
+    position: absolute; width: 54px; height: 54px; border-radius: 50%;
+    background: rgba(0,0,0,0.75); border: 2px solid rgba(255,255,255,0.8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: #fff; transition: background 0.15s, transform 0.15s;
+    z-index: 2;
+  }
+  .yt-thumb-player:hover .yt-play-btn { background: #ff0000; transform: scale(1.08); }
+  .yt-play-label {
+    position: absolute; bottom: 8px; left: 0; right: 0; text-align: center;
+    font-size: 11px; color: rgba(255,255,255,0.75); z-index: 2;
+    font-family: var(--font-body);
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .detail-panel { position: fixed; inset: 0; width: 100%; z-index: 500; transform: translateX(100%); }
+    .card-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="logo">INSPO<span>LIB</span></div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="searchInput" placeholder="Search titles, notes, URLs…">
+  </div>
+  <div class="topbar-right">
+    <span class="count-badge" id="totalCount">0 items</span>
+    <button class="btn-add" id="openAddModal">+ Add Item</button>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Browse</div>
+      <button class="filter-btn active" data-filter="all" data-type="all">
+        <span class="ficon">◈</span><span class="fname">All Items</span>
+        <span class="fcount" id="fc-all">0</span>
+      </button>
+      <button class="filter-btn" data-filter="bookmarked" data-type="all">
+        <span class="ficon">★</span><span class="fname">Bookmarks</span>
+        <span class="fcount" id="fc-bm">0</span>
+      </button>
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Sources</div>
+      <button class="filter-btn" data-filter="article" data-type="source">
+        <span class="ficon">◉</span><span class="fname">Articles</span>
+        <span class="fcount" id="fc-article">0</span>
+      </button>
+      <button class="filter-btn" data-filter="ytchannel" data-type="source">
+        <span class="ficon">▶</span><span class="fname">YT Channels</span>
+        <span class="fcount" id="fc-ytchannel">0</span>
+      </button>
+      <button class="filter-btn" data-filter="ytvideo" data-type="source">
+        <span class="ficon">▷</span><span class="fname">YT Videos</span>
+        <span class="fcount" id="fc-ytvideo">0</span>
+      </button>
+      <button class="filter-btn" data-filter="twitter" data-type="source">
+        <span class="ficon">✕</span><span class="fname">Twitter</span>
+        <span class="fcount" id="fc-twitter">0</span>
+      </button>
+      <button class="filter-btn" data-filter="reddit" data-type="source">
+        <span class="ficon">◈</span><span class="fname">Reddit</span>
+        <span class="fcount" id="fc-reddit">0</span>
+      </button>
+      <button class="filter-btn" data-filter="instagram" data-type="source">
+        <span class="ficon">⬡</span><span class="fname">Instagram</span>
+        <span class="fcount" id="fc-instagram">0</span>
+      </button>
+      <button class="filter-btn" data-filter="trend" data-type="source">
+        <span class="ficon">↑</span><span class="fname">Trends</span>
+        <span class="fcount" id="fc-trend">0</span>
+      </button>
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Categories</div>
+      <button class="filter-btn" data-filter="Entertainment" data-type="category"><span class="ficon">🎬</span><span class="fname">Entertainment</span><span class="fcount" id="fc-Entertainment">0</span></button>
+      <button class="filter-btn" data-filter="Education" data-type="category"><span class="ficon">📚</span><span class="fname">Education</span><span class="fcount" id="fc-Education">0</span></button>
+      <button class="filter-btn" data-filter="Health" data-type="category"><span class="ficon">💊</span><span class="fname">Health</span><span class="fcount" id="fc-Health">0</span></button>
+      <button class="filter-btn" data-filter="Politics" data-type="category"><span class="ficon">🏛</span><span class="fname">Politics</span><span class="fcount" id="fc-Politics">0</span></button>
+      <button class="filter-btn" data-filter="Sports" data-type="category"><span class="ficon">⚽</span><span class="fname">Sports</span><span class="fcount" id="fc-Sports">0</span></button>
+      <button class="filter-btn" data-filter="Technology" data-type="category"><span class="ficon">💻</span><span class="fname">Technology</span><span class="fcount" id="fc-Technology">0</span></button>
+      <button class="filter-btn" data-filter="AI" data-type="category"><span class="ficon">🤖</span><span class="fname">AI</span><span class="fcount" id="fc-AI">0</span></button>
+      <button class="filter-btn" data-filter="Trending" data-type="category"><span class="ficon">🔥</span><span class="fname">Trending</span><span class="fcount" id="fc-Trending">0</span></button>
+      <button class="filter-btn" data-filter="Food" data-type="category"><span class="ficon">🍜</span><span class="fname">Food</span><span class="fcount" id="fc-Food">0</span></button>
+      <button class="filter-btn" data-filter="Travel" data-type="category"><span class="ficon">✈</span><span class="fname">Travel</span><span class="fcount" id="fc-Travel">0</span></button>
+      <button class="filter-btn" data-filter="DIY" data-type="category"><span class="ficon">🔧</span><span class="fname">DIY</span><span class="fcount" id="fc-DIY">0</span></button>
+      <button class="filter-btn" data-filter="Motivational Stories" data-type="category"><span class="ficon">💪</span><span class="fname">Motivational</span><span class="fcount" id="fc-Motivational Stories">0</span></button>
+      <button class="filter-btn" data-filter="Devotional Stories" data-type="category"><span class="ficon">🙏</span><span class="fname">Devotional</span><span class="fcount" id="fc-Devotional Stories">0</span></button>
+      <button class="filter-btn" data-filter="Learn" data-type="category"><span class="ficon">🎓</span><span class="fname">Learn</span><span class="fcount" id="fc-Learn">0</span></button>
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Data</div>
+      <div class="io-row">
+        <button class="io-btn" id="exportBtn">↓ Export</button>
+        <label class="io-btn" style="cursor:pointer;">↑ Import<input type="file" id="importFile" accept=".json" style="display:none"></label>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+    <div class="toolbar">
+      <div class="active-filters" id="activeFilters"></div>
+      <select class="sort-select" id="sortSelect">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="alpha">A → Z</option>
+        <option value="bookmarks">Bookmarks first</option>
+      </select>
+      <div class="view-toggle">
+        <button class="view-btn active" id="gridViewBtn" title="Grid view">⊞</button>
+        <button class="view-btn" id="listViewBtn" title="List view">≡</button>
+      </div>
+    </div>
+    <div class="card-grid" id="cardGrid"></div>
+  </main>
+
+  <!-- DETAIL PANEL -->
+  <aside class="detail-panel" id="detailPanel">
+    <div class="dp-header">
+      <div class="dp-title">Details</div>
+      <button class="dp-close" id="dpClose">✕</button>
+    </div>
+    <div class="dp-body" id="dpBody"></div>
+  </aside>
+</div>
+
+<!-- ADD ITEM MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Add New Item</div>
+      <button class="modal-close" id="closeModal">✕</button>
+    </div>
+    <div class="form-row">
+      <label>Title *</label>
+      <input type="text" id="f-title" placeholder="Enter a descriptive title…">
+    </div>
+    <div class="form-row">
+      <label>URL *</label>
+      <input type="url" id="f-url" placeholder="https://…">
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Source Type *</label>
+        <select id="f-source">
+          <option value="">Select source…</option>
+          <option value="article">Article</option>
+          <option value="ytchannel">YouTube Channel</option>
+          <option value="ytvideo">YouTube Video</option>
+          <option value="twitter">Twitter Post</option>
+          <option value="reddit">Reddit Post</option>
+          <option value="instagram">Instagram Reel</option>
+          <option value="trend">Trend</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Category *</label>
+        <select id="f-category">
+          <option value="">Select category…</option>
+          <option>Entertainment</option>
+          <option>Education</option>
+          <option>Health</option>
+          <option>Politics</option>
+          <option>Sports</option>
+          <option>Technology</option>
+          <option>AI</option>
+          <option>Trending</option>
+          <option>Food</option>
+          <option>Travel</option>
+          <option>DIY</option>
+          <option>Motivational Stories</option>
+          <option>Devotional Stories</option>
+          <option>Learn</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Thumbnail URL (optional)</label>
+      <input type="url" id="f-thumb" placeholder="https://… image URL">
+    </div>
+    <div class="form-row">
+      <label>Notes</label>
+      <textarea id="f-notes" placeholder="Why is this inspiring? Key takeaways…"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-cancel" id="cancelModal">Cancel</button>
+      <button class="btn-save" id="saveItem">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'inspolib_v2';
+let items = [];
+let currentFilter = { type: 'all', value: 'all' };
+let searchQuery = '';
+let sortMode = 'newest';
+let viewMode = 'grid';
+let editingId = null;
+let detailId = null;
+
+const sourceInfo = {
+  article:   { label: 'Article',    icon: '◉', cls: 'src-article',   thumbCls: 'thumb-article' },
+  ytchannel: { label: 'YT Channel', icon: '▶', cls: 'src-ytchannel', thumbCls: 'thumb-ytchannel' },
+  ytvideo:   { label: 'YT Video',   icon: '▷', cls: 'src-ytvideo',   thumbCls: 'thumb-ytvideo' },
+  twitter:   { label: 'Twitter',    icon: '✕', cls: 'src-twitter',   thumbCls: 'thumb-twitter' },
+  reddit:    { label: 'Reddit',     icon: '◈', cls: 'src-reddit',    thumbCls: 'thumb-reddit' },
+  instagram: { label: 'Instagram',  icon: '⬡', cls: 'src-instagram', thumbCls: 'thumb-instagram' },
+  trend:     { label: 'Trend',      icon: '↑', cls: 'src-trend',     thumbCls: 'thumb-trend' },
+};
+
+function load() {
+  try { items = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { items = []; }
+  if (!items.length) seedSamples();
+}
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
+
+function seedSamples() {
+  items = [
+    { id: uid(), title: 'The Science of Motivation – What Actually Drives Us', url: 'https://www.youtube.com/watch?v=u6XAPnuFjJc', source: 'ytvideo', category: 'Education', notes: 'Great breakdown of intrinsic vs extrinsic motivation. Highly recommend for team leads.', thumb: '', bookmarked: true, createdAt: Date.now() - 86400000*3 },
+    { id: uid(), title: 'SumanTV Health – Telugu Wellness Channel', url: 'https://www.youtube.com/@SumanTVHealth', source: 'ytchannel', category: 'Health', notes: 'Reference channel for content benchmarking.', thumb: '', bookmarked: false, createdAt: Date.now() - 86400000*2 },
+    { id: uid(), title: 'How AI is Reshaping Healthcare in India', url: 'https://economictimes.indiatimes.com', source: 'article', category: 'AI', notes: 'Strong narrative for NRI audience content angles.', thumb: '', bookmarked: true, createdAt: Date.now() - 86400000 },
+    { id: uid(), title: 'Biryani That Changed Everything – Street Food Thread', url: 'https://reddit.com/r/IndianFood', source: 'reddit', category: 'Food', notes: 'Viral thread with 40k upvotes. Good format inspiration.', thumb: '', bookmarked: false, createdAt: Date.now() - 3600000*5 },
+    { id: uid(), title: 'Top Travel Reels – Hyderabad Hidden Gems', url: 'https://instagram.com/explore', source: 'instagram', category: 'Travel', notes: 'Reel format works well under 30s with text overlay.', thumb: '', bookmarked: false, createdAt: Date.now() - 3600000*2 },
+    { id: uid(), title: 'The Rise of Short-Form Telugu Content', url: 'https://twitter.com', source: 'twitter', category: 'Trending', notes: 'Thread with data on Josh App vs YouTube Shorts in AP/TS.', thumb: '', bookmarked: true, createdAt: Date.now() - 3600000 },
+  ];
+  save();
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2,5); }
+
+function getYTId(url) {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function getFiltered() {
+  let list = [...items];
+  if (currentFilter.value === 'bookmarked') list = list.filter(i => i.bookmarked);
+  else if (currentFilter.type === 'source') list = list.filter(i => i.source === currentFilter.value);
+  else if (currentFilter.type === 'category') list = list.filter(i => i.category === currentFilter.value);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(i => i.title.toLowerCase().includes(q) || (i.notes||'').toLowerCase().includes(q) || i.url.toLowerCase().includes(q));
+  }
+  if (sortMode === 'newest') list.sort((a,b) => b.createdAt - a.createdAt);
+  else if (sortMode === 'oldest') list.sort((a,b) => a.createdAt - b.createdAt);
+  else if (sortMode === 'alpha') list.sort((a,b) => a.title.localeCompare(b.title));
+  else if (sortMode === 'bookmarks') list.sort((a,b) => (b.bookmarked?1:0)-(a.bookmarked?1:0));
+  return list;
+}
+
+function updateCounts() {
+  document.getElementById('fc-all').textContent = items.length;
+  document.getElementById('fc-bm').textContent = items.filter(i=>i.bookmarked).length;
+  ['article','ytchannel','ytvideo','twitter','reddit','instagram','trend'].forEach(s => {
+    const el = document.getElementById('fc-'+s);
+    if(el) el.textContent = items.filter(i=>i.source===s).length;
+  });
+  ['Entertainment','Education','Health','Politics','Sports','Technology','AI','Trending','Food','Travel','DIY','Motivational Stories','Devotional Stories','Learn'].forEach(c => {
+    const el = document.getElementById('fc-'+c);
+    if(el) el.textContent = items.filter(i=>i.category===c).length;
+  });
+  document.getElementById('totalCount').textContent = items.length + ' item' + (items.length===1?'':'s');
+}
+
+function renderCards() {
+  const grid = document.getElementById('cardGrid');
+  const list = getFiltered();
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="e-icon">◈</div>
+      <h3>Nothing here yet</h3>
+      <p>${searchQuery ? 'No results match "'+searchQuery+'"' : 'Add your first inspirational item to get started.'}</p>
+      ${!searchQuery ? '<button onclick="openAdd()">+ Add Item</button>' : ''}
+    </div>`;
+    return;
+  }
+  grid.innerHTML = list.map(item => cardHTML(item)).join('');
+  grid.querySelectorAll('.card').forEach(el => {
+    el.addEventListener('click', e => {
+      if(e.target.classList.contains('bookmark-btn') || e.target.classList.contains('open-btn') || e.target.classList.contains('delete-btn')) return;
+      openDetail(el.dataset.id);
+    });
+  });
+  grid.querySelectorAll('.bookmark-btn').forEach(el => {
+    el.addEventListener('click', e => { e.stopPropagation(); toggleBookmark(el.dataset.id); });
+  });
+  grid.querySelectorAll('.delete-btn').forEach(el => {
+    el.addEventListener('click', e => { e.stopPropagation(); deleteItem(el.dataset.id); });
+  });
+}
+
+function cardHTML(item) {
+  const si = sourceInfo[item.source] || { label: item.source, icon: '◉', cls: '', thumbCls: '' };
+  const ytId = (item.source === 'ytvideo' || item.source === 'ytchannel') ? getYTId(item.url) : null;
+  const thumbBg = ytId ? `background-image:url(https://img.youtube.com/vi/${ytId}/mqdefault.jpg);background-size:cover;background-position:center;` : '';
+  const thumbIcon = !item.thumb && !ytId ? si.icon : '';
+  const listCls = viewMode === 'list' ? ' list-view' : '';
+  return `<div class="card${listCls}" data-id="${item.id}">
+    <div class="card-thumb ${si.thumbCls}" style="${item.thumb ? 'background-image:url('+item.thumb+');background-size:cover;background-position:center;' : thumbBg}">
+      ${thumbIcon ? `<span style="position:relative;z-index:1;font-size:${viewMode==='list'?'22px':'36px'}">${thumbIcon}</span>` : ''}
+      ${(item.thumb||ytId) ? '<div class="thumb-overlay"></div>' : ''}
+    </div>
+    <div class="card-body">
+      <div class="card-title">${esc(item.title)}</div>
+      <div class="card-meta">
+        <span class="source-badge ${si.cls}">${si.label}</span>
+        <span class="cat-badge">${item.category}</span>
+      </div>
+      ${item.notes && viewMode!=='list' ? `<div class="card-notes">${esc(item.notes)}</div>` : ''}
+    </div>
+    <div class="card-footer">
+      <span class="card-url">${item.url.replace(/^https?:\/\//,'')}</span>
+      <button class="bookmark-btn ${item.bookmarked?'bookmarked':''}" data-id="${item.id}" title="${item.bookmarked?'Remove bookmark':'Bookmark'}">${item.bookmarked?'★':'☆'}</button>
+      <button class="delete-btn" data-id="${item.id}" title="Delete">✕</button>
+    </div>
+  </div>`;
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function toggleBookmark(id) {
+  const item = items.find(i=>i.id===id);
+  if(!item) return;
+  item.bookmarked = !item.bookmarked;
+  save(); updateCounts(); renderCards();
+  showToast(item.bookmarked ? '★ Bookmarked' : 'Bookmark removed');
+}
+
+function deleteItem(id) {
+  if(!confirm('Delete this item?')) return;
+  items = items.filter(i=>i.id!==id);
+  save(); updateCounts(); renderCards();
+  if(detailId === id) closeDetail();
+  showToast('Item deleted');
+}
+
+function openDetail(id) {
+  const item = items.find(i=>i.id===id);
+  if(!item) return;
+  detailId = id;
+  const si = sourceInfo[item.source] || { label: item.source, icon: '◉', cls: '', thumbCls: '' };
+  const ytId = (item.source==='ytvideo' || item.source==='ytchannel') ? getYTId(item.url) : null;
+  const thumbBg = ytId ? '' : (item.thumb ? `background-image:url(${item.thumb});background-size:cover;background-position:center;` : '');
+  const dp = document.getElementById('dpBody');
+  const ytBlock = ytId ? `
+    <div class="dp-thumb has-video" id="dp-video-wrap">
+      <img id="yt-cover" src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg"
+        style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;cursor:pointer;z-index:2;"
+        alt="thumbnail" onclick="loadYTPlayer('${ytId}')">
+      <div id="yt-play-overlay" onclick="loadYTPlayer('${ytId}')"
+        style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;cursor:pointer;background:rgba(0,0,0,0.25);">
+        <div style="width:62px;height:62px;border-radius:50%;background:rgba(0,0,0,0.8);border:2px solid rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;transition:background 0.15s;" onmouseover="this.style.background='#ff0000'" onmouseout="this.style.background='rgba(0,0,0,0.8)'">▶</div>
+        <div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,0.85);font-family:var(--font-body);">▶ Play video</div>
+      </div>
+    </div>` :
+    `<div class="dp-thumb ${si.thumbCls}" style="${thumbBg}">
+      ${item.thumb ? `<img src="${item.thumb}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">` :
+        `<span style="position:relative;z-index:1;font-size:52px">${si.icon}</span>`}
+    </div>`;
+  dp.innerHTML = `
+    ${ytBlock}
+    <div class="dp-name">${esc(item.title)}</div>
+    <div class="dp-badges">
+      <span class="source-badge ${si.cls}">${si.label}</span>
+      <span class="cat-badge">${item.category}</span>
+      ${item.bookmarked ? '<span class="cat-badge" style="color:#c8f060;border-color:rgba(200,240,96,0.3)">★ Saved</span>' : ''}
+    </div>
+    <div class="dp-meta">
+      <div class="dp-meta-row"><span class="dp-meta-label">URL</span><span class="dp-meta-val">${esc(item.url)}</span></div>
+      <div class="dp-meta-row"><span class="dp-meta-label">Added</span><span class="dp-meta-val">${new Date(item.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span></div>
+    </div>
+    ${item.notes ? `<div><div class="dp-notes-label">Notes</div><div class="dp-notes">${esc(item.notes)}</div></div>` : ''}
+    <div class="dp-actions">
+      <a class="dp-btn primary" href="${item.url}" target="_blank" rel="noopener">↗ Open Link</a>
+      <button class="dp-btn secondary" onclick="openEdit('${id}')">✎ Edit Item</button>
+      <button class="dp-btn secondary" onclick="toggleBookmark('${id}');openDetail('${id}')">${item.bookmarked?'☆ Remove Bookmark':'★ Bookmark'}</button>
+      <button class="dp-btn danger" onclick="deleteItem('${id}')">✕ Delete</button>
+    </div>`;
+  document.getElementById('detailPanel').classList.add('open');
+}
+
+function closeDetail() {
+  detailId = null;
+  document.getElementById('detailPanel').classList.remove('open');
+}
+
+function openAdd() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'Add New Item';
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-url').value = '';
+  document.getElementById('f-source').value = '';
+  document.getElementById('f-category').value = '';
+  document.getElementById('f-thumb').value = '';
+  document.getElementById('f-notes').value = '';
+  document.getElementById('addModal').classList.add('open');
+}
+
+function openEdit(id) {
+  const item = items.find(i=>i.id===id);
+  if(!item) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = 'Edit Item';
+  document.getElementById('f-title').value = item.title;
+  document.getElementById('f-url').value = item.url;
+  document.getElementById('f-source').value = item.source;
+  document.getElementById('f-category').value = item.category;
+  document.getElementById('f-thumb').value = item.thumb||'';
+  document.getElementById('f-notes').value = item.notes||'';
+  document.getElementById('addModal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('addModal').classList.remove('open'); }
+
+function saveItem() {
+  const title = document.getElementById('f-title').value.trim();
+  const url = document.getElementById('f-url').value.trim();
+  const source = document.getElementById('f-source').value;
+  const category = document.getElementById('f-category').value;
+  const thumb = document.getElementById('f-thumb').value.trim();
+  const notes = document.getElementById('f-notes').value.trim();
+  if(!title || !url || !source || !category) { showToast('Please fill all required fields'); return; }
+  if(editingId) {
+    const item = items.find(i=>i.id===editingId);
+    if(item) { item.title=title; item.url=url; item.source=source; item.category=category; item.thumb=thumb; item.notes=notes; }
+    showToast('Item updated');
+  } else {
+    items.unshift({ id: uid(), title, url, source, category, thumb, notes, bookmarked: false, createdAt: Date.now() });
+    showToast('Item added to library');
+  }
+  save(); updateCounts(); renderCards(); closeModal();
+  if(editingId && detailId === editingId) openDetail(editingId);
+}
+
+function setFilter(type, value) {
+  currentFilter = { type, value };
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === value && (value==='all'||value==='bookmarked'||b.dataset.type===type));
+  });
+  renderActiveFilters();
+  renderCards();
+}
+
+function renderActiveFilters() {
+  const af = document.getElementById('activeFilters');
+  if(currentFilter.value === 'all') { af.innerHTML=''; return; }
+  const label = currentFilter.value === 'bookmarked' ? '★ Bookmarks' : currentFilter.value;
+  af.innerHTML = `<div class="af-chip">${label}<button onclick="setFilter('all','all')">✕</button></div>`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'inspolib-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click(); showToast('Library exported');
+}
+
+document.getElementById('importFile').addEventListener('change', e => {
+  const file = e.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if(Array.isArray(data)) {
+        items = data; save(); updateCounts(); renderCards();
+        showToast('Imported ' + data.length + ' items');
+      }
+    } catch { showToast('Invalid file'); }
+    e.target.value = '';
+  };
+  r.readAsText(file);
+});
+
+// Event bindings
+document.getElementById('openAddModal').addEventListener('click', openAdd);
+document.getElementById('closeModal').addEventListener('click', closeModal);
+document.getElementById('cancelModal').addEventListener('click', closeModal);
+document.getElementById('saveItem').addEventListener('click', saveItem);
+document.getElementById('dpClose').addEventListener('click', closeDetail);
+document.getElementById('exportBtn').addEventListener('click', exportData);
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value; renderCards();
+});
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortMode = e.target.value; renderCards();
+});
+document.getElementById('gridViewBtn').addEventListener('click', () => {
+  viewMode = 'grid';
+  document.getElementById('cardGrid').classList.remove('list-view');
+  document.getElementById('gridViewBtn').classList.add('active');
+  document.getElementById('listViewBtn').classList.remove('active');
+  renderCards();
+});
+document.getElementById('listViewBtn').addEventListener('click', () => {
+  viewMode = 'list';
+  document.getElementById('cardGrid').classList.add('list-view');
+  document.getElementById('listViewBtn').classList.add('active');
+  document.getElementById('gridViewBtn').classList.remove('active');
+  renderCards();
+});
+document.getElementById('addModal').addEventListener('click', e => {
+  if(e.target === document.getElementById('addModal')) closeModal();
+});
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => setFilter(btn.dataset.type, btn.dataset.filter));
+});
+
+function loadYTPlayer(ytId) {
+  const wrap = document.getElementById('dp-video-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = `<iframe class="yt-iframe"
+    src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen></iframe>`;
+}
+
+// Init
+load(); updateCounts(); renderCards();
+</script>
+</body>
+</html>

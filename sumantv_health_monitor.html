@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SumanTV Health — Content Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0b0f;
+    --surface: #111318;
+    --surface2: #181c25;
+    --border: #1e2330;
+    --accent: #e8432d;
+    --accent2: #f97316;
+    --gold: #f5c842;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --text: #f0f2f8;
+    --muted: #5a6075;
+    --muted2: #7a8098;
+    --youtube: #FF0000;
+    --instagram: #E1306C;
+    --facebook: #1877F2;
+    --twitter: #1DA1F2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0d0f15 0%, #12151e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-badge {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: white;
+  }
+
+  .logo-text {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--text);
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: -2px;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 24px;
+  }
+
+  .hstat {
+    text-align: center;
+  }
+
+  .hstat-val {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .hstat-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    position: sticky;
+    top: 64px;
+    z-index: 99;
+  }
+
+  .controls-inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 9px 16px 9px 38px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-box input:focus { border-color: var(--accent); }
+
+  .search-box svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.4;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .pill-btn {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .pill-btn:hover { border-color: var(--muted2); color: var(--text); }
+  .pill-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .pill-btn.yt.active  { background: var(--youtube); border-color: var(--youtube); }
+  .pill-btn.ig.active  { background: var(--instagram); border-color: var(--instagram); }
+  .pill-btn.fb.active  { background: var(--facebook); border-color: var(--facebook); }
+  .pill-btn.tw.active  { background: var(--twitter); border-color: var(--twitter); }
+
+  .date-btns { display: flex; gap: 6px; }
+
+  select.filter-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted2);
+    padding: 8px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .view-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .view-btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .view-btn.active { background: var(--accent); color: white; }
+
+  /* ── CSV UPLOAD PANEL ── */
+  .upload-section {
+    max-width: 1600px;
+    margin: 24px auto;
+    padding: 0 32px;
+  }
+
+  .upload-card {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .upload-card:hover, .upload-card.drag-over {
+    border-color: var(--accent);
+    background: rgba(232,67,45,0.05);
+  }
+
+  .upload-card input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .upload-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .upload-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .upload-card p {
+    font-size: 13px;
+    color: var(--muted2);
+  }
+
+  .upload-card .btn-primary {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 24px;
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* Manual add section */
+  .manual-section {
+    margin-top: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .manual-section h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .manual-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .platform-select-manual {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    min-width: 130px;
+  }
+
+  .manual-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 9px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    min-width: 200px;
+  }
+
+  .manual-input:focus { border-color: var(--accent); }
+
+  .add-btn {
+    padding: 9px 18px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* ── GRID ── */
+  .content-section {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 32px 48px;
+  }
+
+  .date-group {
+    margin-bottom: 36px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .date-group-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .date-label {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+
+  .date-day {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-left: -8px;
+  }
+
+  .date-count {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 12px;
+    color: var(--muted2);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .date-metrics {
+    display: flex;
+    gap: 16px;
+    margin-left: auto;
+  }
+
+  .dm-item {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .dm-item span {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--muted2);
+    font-size: 12px;
+  }
+
+  /* ── CARD GRID ── */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .video-grid.compact {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+
+  .video-grid.list {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  /* Card */
+  .vcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    position: relative;
+  }
+
+  .vcard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    border-color: var(--muted);
+  }
+
+  .vcard.list-mode {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .vcard.list-mode .thumb-wrap {
+    width: 120px;
+    height: 68px;
+    flex-shrink: 0;
+    border-radius: 8px;
+  }
+
+  /* Platform indicator */
+  .platform-dot {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  }
+
+  .platform-dot.youtube   { background: var(--youtube);   color: white; }
+  .platform-dot.instagram { background: var(--instagram); color: white; }
+  .platform-dot.facebook  { background: var(--facebook);  color: white; }
+  .platform-dot.twitter   { background: var(--twitter);   color: white; }
+
+  /* Thumbnail */
+  .thumb-wrap {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: var(--surface2);
+    overflow: hidden;
+  }
+
+  .thumb-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+  }
+
+  .vcard:hover .thumb-wrap img { transform: scale(1.04); }
+
+  .thumb-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 28px;
+  }
+
+  /* Duration badge */
+  .duration-badge {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.85);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* Views badge */
+  .views-badge {
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    background: rgba(0,0,0,0.75);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  /* Card Body */
+  .vcard-body {
+    padding: 10px 12px 12px;
+  }
+
+  .vcard.list-mode .vcard-body {
+    padding: 0;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .vcard-title {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .vcard.list-mode .vcard-title {
+    -webkit-line-clamp: 1;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+
+  .vcard-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .meta-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--surface2);
+    color: var(--muted2);
+    white-space: nowrap;
+  }
+
+  .meta-pill.views { color: var(--gold); }
+  .meta-pill.revenue { color: var(--green); }
+
+  .vcard-stats {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .list-meta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  /* Perf bar */
+  .perf-bar-wrap {
+    height: 2px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .perf-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+  }
+
+  .empty-state .es-icon { font-size: 56px; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: var(--muted2); }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    backdrop-filter: blur(6px);
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 680px;
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.25s;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0); }
+
+  .modal-thumb {
+    aspect-ratio: 16/9;
+    background: var(--surface2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .modal-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  .modal-thumb iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .modal-body { padding: 24px; }
+
+  .modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .modal-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .mstat {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .mstat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .mstat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  .modal-actions { display: flex; gap: 10px; }
+
+  .modal-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .modal-btn:hover { border-color: var(--muted2); }
+  .modal-btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+  .modal-btn.primary:hover { background: #d63a27; }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    line-height: 1;
+  }
+
+  /* ── PROGRESS ── */
+  .load-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.3s;
+    z-index: 200;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    header, .controls, .upload-section, .content-section { padding-left: 16px; padding-right: 16px; }
+    .controls { top: 0; position: relative; }
+    .header-stats { display: none; }
+    .modal-stats { grid-template-columns: repeat(2,1fr); }
+    .video-grid { grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); }
+    .controls-inner { gap: 10px; }
+    .date-metrics { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="load-progress" id="loadProgress" style="width:0%"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-badge">STV</div>
+      <div>
+        <div class="logo-text">SumanTV Health</div>
+        <div class="logo-sub">Content Monitor</div>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="hstat-val" id="totalCount" style="color:var(--accent)">0</div>
+        <div class="hstat-label">Total Videos</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val" id="totalViews" style="color:var(--gold)">0</div>
+        <div class="hstat-label">Total Views</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val" id="totalRevenue" style="color:var(--green)">$0</div>
+        <div class="hstat-label">Revenue</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val" id="activeDays" style="color:var(--blue)">0</div>
+        <div class="hstat-label">Active Days</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls" id="controlsBar" style="display:none">
+  <div class="controls-inner">
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search videos by title…">
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Platform</span>
+      <div class="date-btns">
+        <button class="pill-btn active" onclick="filterPlatform('all', this)">All</button>
+        <button class="pill-btn yt"  onclick="filterPlatform('youtube', this)">▶ YouTube</button>
+        <button class="pill-btn ig"  onclick="filterPlatform('instagram', this)">◈ Instagram</button>
+        <button class="pill-btn fb"  onclick="filterPlatform('facebook', this)">⬡ Facebook</button>
+        <button class="pill-btn tw"  onclick="filterPlatform('twitter', this)">✦ Twitter/X</button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Date</span>
+      <select class="filter-select" id="dateFilter" onchange="applyFilters()">
+        <option value="all">All Dates</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Sort</span>
+      <select class="filter-select" id="sortSelect" onchange="applyFilters()">
+        <option value="date-desc">Newest First</option>
+        <option value="date-asc">Oldest First</option>
+        <option value="views-desc">Most Views</option>
+        <option value="revenue-desc">Top Revenue</option>
+        <option value="duration-desc">Longest</option>
+      </select>
+    </div>
+
+    <div class="view-toggle">
+      <button class="view-btn active" id="vbGrid" onclick="setView('grid', this)" title="Grid">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </button>
+      <button class="view-btn" id="vbCompact" onclick="setView('compact', this)" title="Compact">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="16" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/><rect x="16" y="9" width="5" height="5" rx="1"/><rect x="2" y="16" width="5" height="5" rx="1"/><rect x="9" y="16" width="5" height="5" rx="1"/><rect x="16" y="16" width="5" height="5" rx="1"/></svg>
+      </button>
+      <button class="view-btn" id="vbList" onclick="setView('list', this)" title="List">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="2.5" rx="1"/><rect x="3" y="10.5" width="18" height="2.5" rx="1"/><rect x="3" y="17" width="18" height="2.5" rx="1"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD / MANUAL SECTION -->
+<div class="upload-section" id="uploadSection">
+  <div class="upload-card" id="uploadCard">
+    <input type="file" id="csvInput" accept=".csv" onchange="handleCSV(event)">
+    <div class="upload-icon">📊</div>
+    <h3>Upload YouTube Analytics CSV</h3>
+    <p>Drag & drop your CSV file or click to browse<br>Columns: <strong>Content ID, Title, Publish Date, Duration, Views…</strong></p>
+    <div class="btn-primary">Choose CSV File</div>
+  </div>
+
+  <div class="manual-section">
+    <h4>➕ Add Instagram / Facebook / Twitter / YouTube Videos Manually</h4>
+    <div class="manual-row">
+      <select class="platform-select-manual" id="manualPlatform">
+        <option value="instagram">Instagram</option>
+        <option value="facebook">Facebook</option>
+        <option value="twitter">Twitter/X</option>
+        <option value="youtube">YouTube</option>
+      </select>
+      <input class="manual-input" id="manualLink" placeholder="Paste video URL or YouTube video ID…" />
+      <input class="manual-input" id="manualTitle" placeholder="Video title (optional)" style="max-width:280px" />
+      <input class="manual-input" id="manualDate" type="date" style="max-width:160px" />
+      <button class="add-btn" onclick="addManual()">+ Add</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:6px">For YouTube, you can paste a full URL like <code style="color:var(--muted2)">https://youtube.com/watch?v=XXXX</code> or just the video ID. For Instagram/Facebook/Twitter, paste the post URL.</p>
+  </div>
+</div>
+
+<!-- CONTENT GRID -->
+<div class="content-section" id="contentSection" style="display:none"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-thumb" id="modalThumb">
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-stats" id="modalStats"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ────────────────────────────────────────────────
+//  STATE
+// ────────────────────────────────────────────────
+let allVideos   = [];
+let filteredVideos = [];
+let activePlatform = 'all';
+let activeView   = 'grid';
+let maxViews     = 1;
+
+// ────────────────────────────────────────────────
+//  HELPERS
+// ────────────────────────────────────────────────
+function fmtNum(n) {
+  n = Number(n) || 0;
+  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+  return n.toString();
+}
+
+function ytThumb(id, q='mqdefault') {
+  return `https://img.youtube.com/vi/${id}/${q}.jpg`;
+}
+
+function platformIcon(p) {
+  const m = { youtube:'▶', instagram:'◈', facebook:'⬡', twitter:'✦' };
+  return m[p] || '●';
+}
+
+function extractYTId(str) {
+  if (!str) return null;
+  str = str.trim();
+  // Already looks like an ID (11 chars alphanumeric/dash/underscore)
+  if (/^[A-Za-z0-9_-]{11}$/.test(str)) return str;
+  const m = str.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function extractIGId(url) {
+  const m = url.match(/instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/);
+  return m ? m[1] : null;
+}
+
+function getDaysName(dateStr) {
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const d = new Date(dateStr);
+  return days[d.getDay()];
+}
+
+function setProgress(pct) {
+  document.getElementById('loadProgress').style.width = pct + '%';
+  if (pct >= 100) setTimeout(() => document.getElementById('loadProgress').style.width = '0%', 600);
+}
+
+// ────────────────────────────────────────────────
+//  CSV PARSE
+// ────────────────────────────────────────────────
+function handleCSV(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  setProgress(20);
+  const reader = new FileReader();
+  reader.onload = ev => {
+    setProgress(60);
+    parseCSV(ev.target.result);
+    setProgress(100);
+  };
+  reader.readAsText(file);
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  // Skip header
+  const rows = lines.slice(1);
+  const parsed = [];
+
+  rows.forEach(line => {
+    if (!line.trim()) return;
+    // Handle quoted fields
+    const cols = line.match(/(".*?"|[^,]+|(?<=,)(?=,)|(?<=,)$|^(?=,))/g) || line.split(',');
+    const clean = cols.map(c => c.replace(/^"|"$/g,'').trim());
+
+    const id      = clean[0];
+    const title   = clean[1] || '';
+    const dateRaw = clean[2] || '';
+    const durRaw  = clean[3] || '';
+    const views   = parseInt(clean[4]) || 0;
+    const watchHrs= parseFloat(clean[5]) || 0;
+    const subs    = parseInt(clean[6]) || 0;
+    const revenue = parseFloat(clean[7]) || 0;
+    const avgDur  = clean[8] || '';
+    const impr    = parseInt(clean[9]) || 0;
+    const ctr     = parseFloat(clean[10]) || 0;
+
+    if (!id) return;
+
+    parsed.push({
+      id,
+      platform: 'youtube',
+      title,
+      date: normalizeDate(dateRaw),
+      duration: durRaw,
+      views,
+      watchHrs,
+      subs,
+      revenue,
+      avgDur,
+      impressions: impr,
+      ctr,
+      thumb: ytThumb(id),
+      url: `https://www.youtube.com/watch?v=${id}`
+    });
+  });
+
+  // Merge with existing manual entries
+  const manuals = allVideos.filter(v => v._manual);
+  allVideos = [...parsed, ...manuals];
+  maxViews = Math.max(1, ...allVideos.map(v => v.views));
+  initUI();
+}
+
+function normalizeDate(d) {
+  if (!d) return '';
+  // M/D/YYYY → YYYY-MM-DD
+  const m = d.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (m) return `${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`;
+  return d;
+}
+
+// ────────────────────────────────────────────────
+//  MANUAL ADD
+// ────────────────────────────────────────────────
+function addManual() {
+  const platform = document.getElementById('manualPlatform').value;
+  let   link     = document.getElementById('manualLink').value.trim();
+  const title    = document.getElementById('manualTitle').value.trim() || 'Untitled Video';
+  const dateRaw  = document.getElementById('manualDate').value;
+  const date     = dateRaw || new Date().toISOString().slice(0,10);
+
+  if (!link) { alert('Please enter a video URL or ID'); return; }
+
+  let id, thumb, url;
+
+  if (platform === 'youtube') {
+    const ytId = extractYTId(link);
+    if (!ytId) { alert('Could not extract YouTube video ID from the link.'); return; }
+    id    = ytId;
+    thumb = ytThumb(ytId);
+    url   = `https://www.youtube.com/watch?v=${ytId}`;
+  } else if (platform === 'instagram') {
+    const igId = extractIGId(link);
+    id    = igId || ('ig_' + Date.now());
+    thumb = null;
+    url   = link;
+  } else if (platform === 'facebook') {
+    id    = 'fb_' + Date.now();
+    thumb = null;
+    url   = link;
+  } else {
+    id    = 'tw_' + Date.now();
+    thumb = null;
+    url   = link;
+  }
+
+  const entry = { id, platform, title, date, duration: '--', views: 0, revenue: 0, thumb, url, _manual: true };
+  allVideos = [entry, ...allVideos];
+  maxViews  = Math.max(1, ...allVideos.map(v => v.views));
+
+  // Clear inputs
+  document.getElementById('manualLink').value = '';
+  document.getElementById('manualTitle').value = '';
+  document.getElementById('manualDate').value = '';
+
+  initUI();
+}
+
+// ────────────────────────────────────────────────
+//  UI INIT
+// ────────────────────────────────────────────────
+function initUI() {
+  if (!allVideos.length) return;
+
+  // Show/hide sections
+  document.getElementById('uploadSection').style.display = 'none';
+  document.getElementById('controlsBar').style.display = 'block';
+  document.getElementById('contentSection').style.display = 'block';
+
+  // Build date filter
+  const dates = [...new Set(allVideos.map(v => v.date).filter(Boolean))].sort((a,b)=>b.localeCompare(a));
+  const sel = document.getElementById('dateFilter');
+  sel.innerHTML = '<option value="all">All Dates</option>';
+  dates.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d;
+    opt.textContent = formatDateLabel(d);
+    sel.appendChild(opt);
+  });
+
+  // Update header stats
+  updateHeaderStats(allVideos);
+  applyFilters();
+}
+
+function formatDateLabel(d) {
+  if (!d) return d;
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+}
+
+function updateHeaderStats(videos) {
+  document.getElementById('totalCount').textContent   = fmtNum(videos.length);
+  document.getElementById('totalViews').textContent   = fmtNum(videos.reduce((s,v)=>s+(v.views||0),0));
+  document.getElementById('totalRevenue').textContent = '$' + videos.reduce((s,v)=>s+(v.revenue||0),0).toFixed(0);
+  const uniqueDays = new Set(videos.map(v=>v.date).filter(Boolean)).size;
+  document.getElementById('activeDays').textContent   = uniqueDays;
+}
+
+// ────────────────────────────────────────────────
+//  FILTERS
+// ────────────────────────────────────────────────
+function filterPlatform(platform, btn) {
+  activePlatform = platform;
+  document.querySelectorAll('.filter-group .pill-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const search  = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  const dateVal = document.getElementById('dateFilter')?.value || 'all';
+  const sort    = document.getElementById('sortSelect')?.value || 'date-desc';
+
+  filteredVideos = allVideos.filter(v => {
+    if (activePlatform !== 'all' && v.platform !== activePlatform) return false;
+    if (dateVal !== 'all' && v.date !== dateVal) return false;
+    if (search && !v.title.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  // Sort
+  filteredVideos.sort((a,b) => {
+    if (sort === 'date-asc')     return a.date.localeCompare(b.date);
+    if (sort === 'date-desc')    return b.date.localeCompare(a.date);
+    if (sort === 'views-desc')   return (b.views||0)-(a.views||0);
+    if (sort === 'revenue-desc') return (b.revenue||0)-(a.revenue||0);
+    if (sort === 'duration-desc'){
+      const dur = v => { const m=v.duration?.match(/(\d+):(\d+)/); return m?parseInt(m[1])*60+parseInt(m[2]):0; };
+      return dur(b)-dur(a);
+    }
+    return b.date.localeCompare(a.date);
+  });
+
+  updateHeaderStats(filteredVideos);
+  renderGrid();
+}
+
+// Live search
+document.addEventListener('DOMContentLoaded', () => {
+  const si = document.getElementById('searchInput');
+  if (si) si.addEventListener('input', applyFilters);
+
+  // Drag/drop upload
+  const uc = document.getElementById('uploadCard');
+  uc.addEventListener('dragover', e => { e.preventDefault(); uc.classList.add('drag-over'); });
+  uc.addEventListener('dragleave', () => uc.classList.remove('drag-over'));
+  uc.addEventListener('drop', e => {
+    e.preventDefault(); uc.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) { const dt = new DataTransfer(); dt.items.add(file); document.getElementById('csvInput').files = dt.files; handleCSV({ target: { files: [file] } }); }
+  });
+});
+
+// ────────────────────────────────────────────────
+//  VIEW TOGGLE
+// ────────────────────────────────────────────────
+function setView(v, btn) {
+  activeView = v;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+// ────────────────────────────────────────────────
+//  RENDER
+// ────────────────────────────────────────────────
+function renderGrid() {
+  const section = document.getElementById('contentSection');
+
+  if (!filteredVideos.length) {
+    section.innerHTML = `
+      <div class="empty-state">
+        <div class="es-icon">🎬</div>
+        <h3>No videos match your filters</h3>
+        <p>Try adjusting the platform, date, or search filter.</p>
+      </div>`;
+    return;
+  }
+
+  // Group by date
+  const groups = {};
+  filteredVideos.forEach(v => {
+    const k = v.date || 'Unknown Date';
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(v);
+  });
+
+  const sortedDates = Object.keys(groups).sort((a,b) => {
+    const s = document.getElementById('sortSelect')?.value || 'date-desc';
+    return s === 'date-asc' ? a.localeCompare(b) : b.localeCompare(a);
+  });
+
+  let html = '';
+  sortedDates.forEach((date, gi) => {
+    const vids = groups[date];
+    const totalViews   = vids.reduce((s,v)=>s+(v.views||0),0);
+    const totalRevenue = vids.reduce((s,v)=>s+(v.revenue||0),0);
+    const dt = new Date(date + 'T00:00:00');
+    const dayName = dt.toLocaleDateString('en-IN', { weekday:'long' });
+    const dateDisp = dt.toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+
+    html += `
+    <div class="date-group" style="animation-delay:${gi*0.04}s">
+      <div class="date-group-header">
+        <div class="date-label">${dateDisp}</div>
+        <div class="date-day">${dayName}</div>
+        <div class="date-count">${vids.length} video${vids.length!==1?'s':''}</div>
+        <div class="date-metrics">
+          <div class="dm-item">👁 <span>${fmtNum(totalViews)} views</span></div>
+          <div class="dm-item">💰 <span>$${totalRevenue.toFixed(0)}</span></div>
+        </div>
+      </div>
+      <div class="video-grid ${activeView === 'compact' ? 'compact' : activeView === 'list' ? 'list' : ''}">
+        ${vids.map((v,i) => renderCard(v, i)).join('')}
+      </div>
+    </div>`;
+  });
+
+  section.innerHTML = html;
+}
+
+function renderCard(v, i) {
+  const perf = maxViews > 0 ? Math.round((v.views/maxViews)*100) : 0;
+  const pIcon = platformIcon(v.platform);
+  const pClass = v.platform;
+
+  const thumbHtml = v.thumb
+    ? `<img src="${v.thumb}" alt="${v.title}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=thumb-fallback>🎬</div>'">`
+    : `<div class="thumb-fallback">${pIcon}</div>`;
+
+  const durBadge = v.duration && v.duration !== '--'
+    ? `<div class="duration-badge">${v.duration}</div>` : '';
+
+  const viewsBadge = v.views
+    ? `<div class="views-badge">👁 ${fmtNum(v.views)}</div>` : '';
+
+  if (activeView === 'list') {
+    return `
+    <div class="vcard list-mode" onclick="openModal(${JSON.stringify(v).replace(/"/g,'&quot;')})">
+      <div class="thumb-wrap">${thumbHtml}${durBadge}</div>
+      <div class="vcard-body">
+        <div class="vcard-title">${v.title}</div>
+        <div class="list-meta">
+          <div class="platform-dot ${pClass}" style="position:relative;top:auto;left:auto;width:18px;height:18px;font-size:8px">${pIcon}</div>
+          <span class="meta-pill views">👁 ${fmtNum(v.views)}</span>
+          ${v.revenue ? `<span class="meta-pill revenue">$${v.revenue.toFixed(2)}</span>` : ''}
+          ${v.ctr ? `<span class="meta-pill">CTR ${v.ctr}%</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  return `
+  <div class="vcard" onclick="openModal(${JSON.stringify(v).replace(/"/g,'&quot;')})" style="animation-delay:${i*0.02}s">
+    <div class="platform-dot ${pClass}">${pIcon}</div>
+    <div class="thumb-wrap">
+      ${thumbHtml}
+      ${durBadge}
+      ${viewsBadge}
+    </div>
+    <div class="vcard-body">
+      <div class="vcard-title">${v.title}</div>
+      <div class="vcard-meta">
+        <span class="meta-pill revenue">${v.revenue ? '$'+v.revenue.toFixed(2) : '—'}</span>
+        <span class="meta-pill">${v.ctr ? v.ctr+'% CTR' : v.platform}</span>
+      </div>
+      <div class="perf-bar-wrap">
+        <div class="perf-bar" style="width:${perf}%"></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ────────────────────────────────────────────────
+//  MODAL
+// ────────────────────────────────────────────────
+function openModal(v) {
+  const overlay = document.getElementById('modalOverlay');
+  const thumbEl = document.getElementById('modalThumb');
+  const titleEl = document.getElementById('modalTitle');
+  const statsEl = document.getElementById('modalStats');
+  const actEl   = document.getElementById('modalActions');
+
+  // Thumb/embed
+  if (v.platform === 'youtube') {
+    thumbEl.innerHTML = `
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+      <iframe src="https://www.youtube.com/embed/${v.id}?autoplay=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  } else {
+    thumbEl.innerHTML = `
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+      ${v.thumb ? `<img src="${v.thumb}" style="width:100%;height:100%;object-fit:cover">` : `<div class="thumb-fallback" style="height:300px">${platformIcon(v.platform)}</div>`}`;
+  }
+
+  titleEl.textContent = v.title;
+
+  statsEl.innerHTML = `
+    <div class="mstat"><div class="mstat-val" style="color:var(--gold)">${fmtNum(v.views||0)}</div><div class="mstat-label">Views</div></div>
+    <div class="mstat"><div class="mstat-val" style="color:var(--green)">$${(v.revenue||0).toFixed(2)}</div><div class="mstat-label">Revenue</div></div>
+    <div class="mstat"><div class="mstat-val" style="color:var(--blue)">${v.ctr ? v.ctr+'%' : '—'}</div><div class="mstat-label">CTR</div></div>
+    <div class="mstat"><div class="mstat-val">${v.duration||'—'}</div><div class="mstat-label">Duration</div></div>
+    <div class="mstat"><div class="mstat-val" style="color:var(--accent)">${fmtNum(v.impressions||0)}</div><div class="mstat-label">Impressions</div></div>
+    <div class="mstat"><div class="mstat-val">${v.avgDur||'—'}</div><div class="mstat-label">Avg View Dur</div></div>
+    <div class="mstat"><div class="mstat-val" style="color:var(--accent2)">${fmtNum(v.subs||0)}</div><div class="mstat-label">Subs Gained</div></div>
+    <div class="mstat"><div class="mstat-val">${v.date||'—'}</div><div class="mstat-label">Published</div></div>
+  `;
+
+  actEl.innerHTML = `
+    <a href="${v.url}" target="_blank" class="modal-btn primary">▶ Watch on ${v.platform.charAt(0).toUpperCase()+v.platform.slice(1)}</a>
+    ${v.platform==='youtube' ? `<a href="https://studio.youtube.com/video/${v.id}/analytics" target="_blank" class="modal-btn">📊 Analytics</a>` : ''}
+    <button class="modal-btn" onclick="navigator.clipboard.writeText('${v.url}');this.textContent='✓ Copied!'">🔗 Copy URL</button>
+  `;
+
+  overlay.classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay'))
+    document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
+});
+</script>
+</body>
+</html>

@@ -786,6 +786,266 @@
     box-shadow: 0 0 8px var(--accent);
   }
 
+  /* ── UPDATE PANEL (slide-down) ── */
+  .update-panel {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease, padding 0.3s ease;
+  }
+  .update-panel.open { max-height: 420px; }
+  .update-panel-inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .upanel-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .upanel-card h4 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .upanel-drop {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .upanel-drop:hover, .upanel-drop.drag-over { border-color: var(--accent); background: rgba(232,67,45,0.06); }
+  .upanel-drop input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .upanel-drop-text { font-size: 13px; color: var(--muted2); }
+  .upanel-drop-text strong { color: var(--accent); }
+
+  /* ── DUPLICATE TOAST ── */
+  .dup-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 500;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    min-width: 320px;
+    max-width: 520px;
+  }
+  .dup-toast.show { transform: translateX(-50%) translateY(0); }
+  .dup-toast-icon { font-size: 22px; flex-shrink: 0; }
+  .dup-toast-body { flex: 1; }
+  .dup-toast-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .dup-toast-sub   { font-size: 11px; color: var(--muted2); }
+  .dup-toast-btn   { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; white-space: nowrap; }
+  .dup-toast-btn:hover { border-color: var(--muted2); }
+  .dup-toast-close { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; flex-shrink: 0; }
+
+  /* ── DUPLICATE REPORT MODAL ── */
+  .dup-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(20px);
+    transition: transform 0.25s;
+  }
+  .modal-overlay.open .dup-modal { transform: translateY(0); }
+  .dup-modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .dup-modal-header h3 { font-size: 16px; font-weight: 600; }
+  .dup-modal-body { overflow-y: auto; padding: 16px 24px 24px; flex: 1; }
+  .dup-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .dup-item:last-child { border-bottom: none; }
+  .dup-thumb { width: 80px; height: 45px; border-radius: 6px; object-fit: cover; background: var(--surface2); flex-shrink: 0; }
+  .dup-info { flex: 1; min-width: 0; }
+  .dup-title { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+  .dup-meta  { font-size: 11px; color: var(--muted2); font-family: 'JetBrains Mono', monospace; }
+  .dup-badge { padding: 3px 9px; border-radius: 10px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+  .dup-badge.skipped { background: rgba(232,67,45,0.15); color: var(--accent); }
+  .dup-badge.updated { background: rgba(34,197,94,0.15); color: var(--green); }
+
+  /* ── UPDATE BTN in controls ── */
+  .update-toggle-btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted2);
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .update-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .update-toggle-btn.active { background: rgba(232,67,45,0.15); border-color: var(--accent); color: var(--accent); }
+
+  /* ── SOCIAL PLATFORM CARDS ── */
+  .social-thumb {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    gap: 6px;
+  }
+
+  /* Instagram gradient */
+  .social-thumb.instagram {
+    background: linear-gradient(135deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d, #f56040, #f77737, #fcaf45, #ffdc80);
+  }
+
+  /* Facebook solid */
+  .social-thumb.facebook {
+    background: linear-gradient(135deg, #1877F2 0%, #0d5cb8 100%);
+  }
+
+  /* Twitter/X dark */
+  .social-thumb.twitter {
+    background: linear-gradient(135deg, #0f1419 0%, #1d2733 100%);
+    border: 1px solid #1d9bf0;
+  }
+
+  .social-thumb-icon {
+    font-size: 32px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+  }
+
+  .social-thumb-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  }
+
+  .social-thumb-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.5);
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    padding: 0 8px;
+  }
+
+  /* Shimmer animation for social cards */
+  .social-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: shimmer 2.5s infinite;
+  }
+
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  /* Modal embed containers */
+  .modal-embed-wrap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+  }
+
+  .modal-embed-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .modal-social-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+  }
+
+  .modal-social-preview.instagram { background: linear-gradient(135deg, #405de6, #833ab4, #e1306c, #f77737, #fcaf45); }
+  .modal-social-preview.facebook  { background: linear-gradient(135deg, #1877F2, #0d5cb8); }
+  .modal-social-preview.twitter   { background: linear-gradient(135deg, #0f1419, #1d2733); border-bottom: 2px solid #1d9bf0; }
+
+  .modal-social-icon { font-size: 48px; }
+  .modal-social-title { font-size: 14px; font-weight: 600; color: white; text-align: center; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+  .modal-social-url { font-size: 11px; color: rgba(255,255,255,0.6); font-family: 'JetBrains Mono', monospace; text-align: center; word-break: break-all; padding: 0 16px; }
+  .modal-open-btn {
+    margin-top: 8px;
+    padding: 10px 24px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 24px;
+    color: white;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .modal-open-btn:hover { background: rgba(255,255,255,0.25); }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -875,6 +1135,10 @@
       </select>
     </div>
 
+    <button class="update-toggle-btn" id="updateToggleBtn" onclick="toggleUpdatePanel()">
+      ⬆ Update Data
+    </button>
+
     <div class="view-toggle">
       <button class="view-btn active" id="vbGrid" onclick="setView('grid', this)" title="Grid">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -889,18 +1153,132 @@
   </div>
 </div>
 
-<!-- UPLOAD / MANUAL SECTION -->
+<!-- UPDATE PANEL (slide-down) -->
+<div class="update-panel" id="updatePanel">
+  <div class="update-panel-inner" style="grid-template-columns:1fr 1fr 1fr">
+    <!-- CSV Re-upload -->
+    <div class="upanel-card">
+      <h4>📊 Upload New CSV
+        <button onclick="downloadSampleCSV()" style="margin-left:auto;padding:4px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--muted2);font-size:10px;font-family:'DM Sans',sans-serif;cursor:pointer">⬇ Template</button>
+      </h4>
+      <div class="upanel-drop" id="upanelDrop">
+        <input type="file" id="csvInputUpdate" accept=".csv" onchange="handleCSV(event)">
+        <div class="upanel-drop-text">Drop CSV or <strong>click to browse</strong><br>
+        <span style="font-size:11px;color:var(--muted)">YouTube Analytics or unified template</span></div>
+      </div>
+    </div>
+
+    <!-- Google Sheets -->
+    <div class="upanel-card">
+      <h4>🔗 Google Sheets Sync
+        <span id="sheetsSyncStatus2" style="margin-left:auto;font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span>
+      </h4>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <input class="manual-input" id="sheetsUrlInput2" placeholder="Paste Published CSV URL…" style="flex:1;font-size:11px" />
+        <button class="add-btn" style="font-size:11px;padding:8px 12px" onclick="saveSheetsUrlFromPanel()">Save</button>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button onclick="fetchFromSheets()" style="flex:1;padding:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--green);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;font-weight:600">⟳ Sync Now</button>
+        <button onclick="clearSheetsUrl()" style="padding:8px 12px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer">✕</button>
+      </div>
+    </div>
+
+    <!-- Manual Add -->
+    <div class="upanel-card">
+      <h4>➕ Add Individual Video</h4>
+      <div class="manual-row" style="flex-wrap:wrap;gap:8px">
+        <select class="platform-select-manual" id="manualPlatform">
+          <option value="instagram">Instagram</option>
+          <option value="facebook">Facebook</option>
+          <option value="twitter">Twitter/X</option>
+          <option value="youtube">YouTube</option>
+        </select>
+        <input class="manual-input" id="manualLink" placeholder="Video URL or YouTube ID…" style="flex:1;min-width:160px" />
+        <input class="manual-input" id="manualTitle" placeholder="Title (optional)" style="flex:1;min-width:130px" />
+        <input class="manual-input" id="manualDate" type="date" style="width:145px;flex:none" />
+        <button class="add-btn" onclick="addManual()">+ Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DUPLICATE TOAST -->
+<div class="dup-toast" id="dupToast">
+  <div class="dup-toast-icon">⚠️</div>
+  <div class="dup-toast-body">
+    <div class="dup-toast-title" id="dupToastTitle">Duplicates Found</div>
+    <div class="dup-toast-sub" id="dupToastSub"></div>
+  </div>
+  <button class="dup-toast-btn" onclick="showDupReport()">View Report</button>
+  <button class="dup-toast-close" onclick="hideDupToast()">✕</button>
+</div>
+
+<!-- DUPLICATE REPORT MODAL -->
+<div class="modal-overlay" id="dupModalOverlay" onclick="closeDupModal(event)">
+  <div class="dup-modal">
+    <div class="dup-modal-header">
+      <h3>🔍 Duplicate Detection Report</h3>
+      <button class="modal-close" style="position:relative;top:auto;right:auto" onclick="document.getElementById('dupModalOverlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="dup-modal-body" id="dupModalBody"></div>
+  </div>
+</div>
+
+
 <div class="upload-section" id="uploadSection">
-  <div class="upload-card" id="uploadCard">
-    <input type="file" id="csvInput" accept=".csv" onchange="handleCSV(event)">
-    <div class="upload-icon">📊</div>
-    <h3>Upload YouTube Analytics CSV</h3>
-    <p>Drag & drop your CSV file or click to browse<br>Columns: <strong>Content ID, Title, Publish Date, Duration, Views…</strong></p>
-    <div class="btn-primary">Choose CSV File</div>
+
+  <!-- TOP ROW: CSV Upload + Google Sheets -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+
+    <!-- CSV Upload -->
+    <div class="manual-section" style="padding:28px">
+      <h4 style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        📊 Upload CSV File
+        <button onclick="downloadSampleCSV()" style="margin-left:auto;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--muted2);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px" title="Download sample CSV template">⬇ Sample CSV</button>
+      </h4>
+      <div class="upload-card" id="uploadCard" style="border-radius:10px;padding:24px;margin:0">
+        <input type="file" id="csvInput" accept=".csv" onchange="handleCSV(event)">
+        <div class="upload-icon" style="font-size:28px;margin-bottom:8px">📁</div>
+        <p style="font-size:13px;color:var(--muted2)">Drop your CSV here or <strong style="color:var(--accent)">click to browse</strong></p>
+        <p style="font-size:11px;color:var(--muted);margin-top:6px">Supports: YouTube Analytics export <em>or</em> the unified multi-platform template</p>
+      </div>
+    </div>
+
+    <!-- Google Sheets Sync -->
+    <div class="manual-section" style="padding:28px">
+      <h4 style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        🔗 Sync from Google Sheets
+        <span id="sheetsSyncStatus" style="margin-left:auto;font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">${sheetsUrl ? '● Connected' : 'Not connected'}</span>
+      </h4>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        Keep your Google Sheet as the master data source. Paste the <strong style="color:var(--muted2)">Published CSV URL</strong> below — the tool fetches it live each time you sync.
+      </p>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input class="manual-input" id="sheetsUrlInput" placeholder="https://docs.google.com/spreadsheets/d/…/pub?output=csv" value="${sheetsUrl}" style="flex:1;font-size:12px" />
+        <button class="add-btn" onclick="saveSheetsUrl()" style="padding:9px 16px">Connect</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="fetchFromSheets()" style="flex:1;padding:9px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">⟳ Sync Now</button>
+        <button onclick="clearSheetsUrl()" style="padding:9px 14px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer">✕ Clear</button>
+      </div>
+      <details style="margin-top:16px">
+        <summary style="font-size:11px;color:var(--muted);cursor:pointer;user-select:none">▸ How to get the URL from Google Sheets</summary>
+        <ol style="font-size:11px;color:var(--muted2);margin-top:10px;padding-left:16px;line-height:2">
+          <li>Open your Google Sheet</li>
+          <li>Go to <strong>File → Share → Publish to web</strong></li>
+          <li>Select the sheet tab you want</li>
+          <li>Change format from <strong>Web page</strong> to <strong>Comma-separated values (.csv)</strong></li>
+          <li>Click <strong>Publish</strong> → copy the URL</li>
+          <li>Paste it above and click <strong>Connect</strong></li>
+        </ol>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px">⚠ The sheet must use the same column format as the sample CSV template.</p>
+      </details>
+    </div>
   </div>
 
+  <!-- Manual Add Row -->
   <div class="manual-section">
-    <h4>➕ Add Instagram / Facebook / Twitter / YouTube Videos Manually</h4>
+    <h4>➕ Add Individual Video Manually</h4>
     <div class="manual-row">
       <select class="platform-select-manual" id="manualPlatform">
         <option value="instagram">Instagram</option>
@@ -913,9 +1291,10 @@
       <input class="manual-input" id="manualDate" type="date" style="max-width:160px" />
       <button class="add-btn" onclick="addManual()">+ Add</button>
     </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:6px">For YouTube, you can paste a full URL like <code style="color:var(--muted2)">https://youtube.com/watch?v=XXXX</code> or just the video ID. For Instagram/Facebook/Twitter, paste the post URL.</p>
+    <p style="font-size:12px;color:var(--muted);margin-top:6px">YouTube: paste full URL or 11-char video ID. For other platforms, paste the full post URL.</p>
   </div>
 </div>
+
 
 <!-- CONTENT GRID -->
 <div class="content-section" id="contentSection" style="display:none"></div>
@@ -989,7 +1368,7 @@ function setProgress(pct) {
 }
 
 // ────────────────────────────────────────────────
-//  CSV PARSE
+//  CSV PARSE  (unified: YouTube Analytics OR custom multi-platform format)
 // ────────────────────────────────────────────────
 function handleCSV(e) {
   const file = e.target.files[0];
@@ -1004,56 +1383,145 @@ function handleCSV(e) {
   reader.readAsText(file);
 }
 
+function splitCSVLine(line) {
+  // Handles quoted fields with commas inside
+  const result = [];
+  let current = '', inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') { inQuote = !inQuote; }
+    else if (ch === ',' && !inQuote) { result.push(current.trim()); current = ''; }
+    else { current += ch; }
+  }
+  result.push(current.trim());
+  return result;
+}
+
+function buildVideoEntry(platform, idOrUrl, title, dateRaw, duration, views, watchHrs, subs, revenue, avgDur, impr, ctr, channel) {
+  platform = (platform || 'youtube').toLowerCase().trim();
+  let id, thumb, url;
+
+  if (platform === 'youtube') {
+    id    = extractYTId(idOrUrl) || idOrUrl;
+    thumb = ytThumb(id);
+    url   = `https://www.youtube.com/watch?v=${id}`;
+  } else if (platform === 'instagram') {
+    const scMatch = idOrUrl.match(/instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/);
+    id    = scMatch ? 'ig_' + scMatch[1] : 'ig_' + idOrUrl.replace(/\W/g,'').slice(-12);
+    thumb = null;
+    url   = idOrUrl.startsWith('http') ? idOrUrl : 'https://instagram.com/p/' + idOrUrl;
+  } else if (platform === 'facebook') {
+    const fbMatch = idOrUrl.match(/(\d{10,})/);
+    id    = fbMatch ? 'fb_' + fbMatch[1] : 'fb_' + Date.now();
+    thumb = null;
+    url   = idOrUrl.startsWith('http') ? idOrUrl : 'https://facebook.com/watch/?v=' + idOrUrl;
+  } else {
+    // twitter / x
+    const twMatch = idOrUrl.match(/status\/(\d+)/);
+    id    = twMatch ? 'tw_' + twMatch[1] : 'tw_' + idOrUrl.replace(/\W/g,'').slice(-15);
+    thumb = null;
+    url   = idOrUrl.startsWith('http') ? idOrUrl : 'https://twitter.com/i/web/status/' + idOrUrl;
+  }
+
+  return {
+    id, platform, title: title || idOrUrl,
+    date: normalizeDate(dateRaw),
+    duration: duration || '--',
+    views: parseInt(views) || 0,
+    watchHrs: parseFloat(watchHrs) || 0,
+    subs: parseInt(subs) || 0,
+    revenue: parseFloat(revenue) || 0,
+    avgDur: avgDur || '',
+    impressions: parseInt(impr) || 0,
+    ctr: parseFloat(ctr) || 0,
+    channel: channel || '',
+    thumb, url
+  };
+}
+
 function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  // Skip header
+  const lines = text.trim().split('\n').filter(l => l.trim());
+  if (lines.length < 2) return;
+
+  const headerRaw = splitCSVLine(lines[0]).map(h => h.toLowerCase().replace(/[^a-z0-9_]/g,'_'));
   const rows = lines.slice(1);
-  const parsed = [];
+  const incoming = [];
+
+  // Detect format by checking if first column header is "platform" or "content"
+  const isUnifiedFormat = headerRaw[0] === 'platform' || headerRaw[0].includes('platform');
+  const isYTAnalytics   = headerRaw[0] === 'content' || headerRaw[0] === 'content_id' || !isUnifiedFormat;
 
   rows.forEach(line => {
     if (!line.trim()) return;
-    // Handle quoted fields
-    const cols = line.match(/(".*?"|[^,]+|(?<=,)(?=,)|(?<=,)$|^(?=,))/g) || line.split(',');
-    const clean = cols.map(c => c.replace(/^"|"$/g,'').trim());
+    const c = splitCSVLine(line);
 
-    const id      = clean[0];
-    const title   = clean[1] || '';
-    const dateRaw = clean[2] || '';
-    const durRaw  = clean[3] || '';
-    const views   = parseInt(clean[4]) || 0;
-    const watchHrs= parseFloat(clean[5]) || 0;
-    const subs    = parseInt(clean[6]) || 0;
-    const revenue = parseFloat(clean[7]) || 0;
-    const avgDur  = clean[8] || '';
-    const impr    = parseInt(clean[9]) || 0;
-    const ctr     = parseFloat(clean[10]) || 0;
-
-    if (!id) return;
-
-    parsed.push({
-      id,
-      platform: 'youtube',
-      title,
-      date: normalizeDate(dateRaw),
-      duration: durRaw,
-      views,
-      watchHrs,
-      subs,
-      revenue,
-      avgDur,
-      impressions: impr,
-      ctr,
-      thumb: ytThumb(id),
-      url: `https://www.youtube.com/watch?v=${id}`
-    });
+    if (isUnifiedFormat) {
+      // New unified format: platform, content_id_or_url, title, publish_date, duration, views, ...
+      const platform  = c[0];
+      const idOrUrl   = c[1];
+      const title     = c[2];
+      const dateRaw   = c[3];
+      const duration  = c[4];
+      const views     = c[5];
+      const watchHrs  = c[6];
+      const subs      = c[7];
+      const revenue   = c[8];
+      const avgDur    = c[9];
+      const impr      = c[10];
+      const ctr       = c[11];
+      const channel   = c[12];
+      if (!idOrUrl) return;
+      incoming.push(buildVideoEntry(platform, idOrUrl, title, dateRaw, duration, views, watchHrs, subs, revenue, avgDur, impr, ctr, channel));
+    } else {
+      // Legacy YouTube Analytics format: Content, Title, Date, Duration, Views, Watch Hours, Subs, Revenue, AvgDur, Impressions, CTR
+      const id = c[0]; if (!id) return;
+      incoming.push(buildVideoEntry('youtube', id, c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], ''));
+    }
   });
 
-  // Merge with existing manual entries
-  const manuals = allVideos.filter(v => v._manual);
-  allVideos = [...parsed, ...manuals];
-  maxViews = Math.max(1, ...allVideos.map(v => v.views));
+  mergeAndUpdate(incoming);
+}
+
+function mergeAndUpdate(incoming) {
+  const existingIds = new Map(allVideos.map(v => [v.id, v]));
+  const dupLog = [], toAdd = [];
+
+  incoming.forEach(v => {
+    if (existingIds.has(v.id)) {
+      const old = existingIds.get(v.id);
+      if (v.views > old.views || v.revenue !== old.revenue) {
+        existingIds.set(v.id, v);
+        dupLog.push({ video: v, action: 'updated', oldViews: old.views });
+      } else {
+        dupLog.push({ video: v, action: 'skipped', oldViews: old.views });
+      }
+    } else {
+      toAdd.push(v);
+      existingIds.set(v.id, v);
+    }
+  });
+
+  allVideos = [...existingIds.values()];
+  maxViews  = Math.max(1, ...allVideos.map(v => v.views));
+  window._lastDupLog = dupLog;
+
+  if (dupLog.length > 0) {
+    const skipped = dupLog.filter(d => d.action === 'skipped').length;
+    const updated = dupLog.filter(d => d.action === 'updated').length;
+    const parts = [];
+    if (skipped) parts.push(`${skipped} skipped`);
+    if (updated) parts.push(`${updated} updated`);
+    showDupToast(
+      `${dupLog.length} Duplicate${dupLog.length > 1 ? 's' : ''} Found`,
+      `${toAdd.length} new added • ${parts.join(' • ')} out of ${incoming.length} rows`
+    );
+  } else {
+    showDupToast('✓ Data Loaded', `${incoming.length} videos added — no duplicates found`);
+  }
+
   initUI();
 }
+
 
 function normalizeDate(d) {
   if (!d) return '';
@@ -1068,47 +1536,118 @@ function normalizeDate(d) {
 // ────────────────────────────────────────────────
 function addManual() {
   const platform = document.getElementById('manualPlatform').value;
-  let   link     = document.getElementById('manualLink').value.trim();
+  const link     = document.getElementById('manualLink').value.trim();
   const title    = document.getElementById('manualTitle').value.trim() || 'Untitled Video';
-  const dateRaw  = document.getElementById('manualDate').value;
-  const date     = dateRaw || new Date().toISOString().slice(0,10);
+  const dateRaw  = document.getElementById('manualDate').value || new Date().toISOString().slice(0,10);
 
   if (!link) { alert('Please enter a video URL or ID'); return; }
 
-  let id, thumb, url;
+  const entry = buildVideoEntry(platform, link, title, dateRaw, '--', 0, 0, 0, 0, '', 0, 0, '');
+  entry._manual = true;
 
-  if (platform === 'youtube') {
-    const ytId = extractYTId(link);
-    if (!ytId) { alert('Could not extract YouTube video ID from the link.'); return; }
-    id    = ytId;
-    thumb = ytThumb(ytId);
-    url   = `https://www.youtube.com/watch?v=${ytId}`;
-  } else if (platform === 'instagram') {
-    const igId = extractIGId(link);
-    id    = igId || ('ig_' + Date.now());
-    thumb = null;
-    url   = link;
-  } else if (platform === 'facebook') {
-    id    = 'fb_' + Date.now();
-    thumb = null;
-    url   = link;
-  } else {
-    id    = 'tw_' + Date.now();
-    thumb = null;
-    url   = link;
+  // Check duplicate
+  if (allVideos.find(v => v.id === entry.id)) {
+    showDupToast('Duplicate Detected', 'This video already exists in the monitor.');
+    return;
   }
 
-  const entry = { id, platform, title, date, duration: '--', views: 0, revenue: 0, thumb, url, _manual: true };
   allVideos = [entry, ...allVideos];
   maxViews  = Math.max(1, ...allVideos.map(v => v.views));
-
-  // Clear inputs
-  document.getElementById('manualLink').value = '';
+  document.getElementById('manualLink').value  = '';
   document.getElementById('manualTitle').value = '';
-  document.getElementById('manualDate').value = '';
-
+  document.getElementById('manualDate').value  = '';
+  showDupToast('✓ Added', `${entry.platform.toUpperCase()} video added to the monitor`);
   initUI();
 }
+
+// ────────────────────────────────────────────────
+//  GOOGLE SHEETS SYNC
+// ────────────────────────────────────────────────
+let sheetsUrl = localStorage.getItem('stv_sheets_url') || '';
+
+function saveSheetsUrl() {
+  const val = document.getElementById('sheetsUrlInput').value.trim();
+  if (!val) { alert('Please paste your Google Sheets CSV export URL'); return; }
+  sheetsUrl = val;
+  localStorage.setItem('stv_sheets_url', sheetsUrl);
+  fetchFromSheets();
+}
+
+function clearSheetsUrl() {
+  sheetsUrl = '';
+  localStorage.removeItem('stv_sheets_url');
+  document.getElementById('sheetsUrlInput').value = '';
+  document.getElementById('sheetsSyncStatus').textContent = 'Not connected';
+  document.getElementById('sheetsSyncStatus').style.color = 'var(--muted)';
+}
+
+async function fetchFromSheets(silent) {
+  const url = sheetsUrl || document.getElementById('sheetsUrlInput').value.trim();
+  if (!url) { alert('No Google Sheets URL saved. Paste one first.'); return; }
+
+  const statusEl = document.getElementById('sheetsSyncStatus');
+  statusEl.textContent = '⟳ Syncing…';
+  statusEl.style.color = 'var(--gold)';
+  setProgress(20);
+
+  // Convert a Share URL to CSV export URL if needed
+  const csvUrl = toSheetsCsvUrl(url);
+
+  try {
+    const res = await fetch(csvUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    setProgress(70);
+    parseCSV(text);
+    setProgress(100);
+    const now = new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+    statusEl.textContent = `✓ Last synced ${now}`;
+    statusEl.style.color = 'var(--green)';
+  } catch(err) {
+    setProgress(0);
+    statusEl.textContent = '✗ Sync failed — check URL & sharing';
+    statusEl.style.color = 'var(--accent)';
+    alert('Could not fetch Google Sheet.\n\nMake sure:\n1. Sheet is shared as "Anyone with link"\n2. You used File → Share → Publish to web → CSV format\n\nError: ' + err.message);
+  }
+}
+
+function toSheetsCsvUrl(url) {
+  // Already a CSV export link — pass through
+  if (url.includes('output=csv') || url.includes('/pub?')) return url;
+  // Convert /edit or /view link to published CSV
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    const id = match[1];
+    const gidMatch = url.match(/gid=(\d+)/);
+    const gid = gidMatch ? gidMatch[1] : '0';
+    return `https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}`;
+  }
+  return url; // Return as-is and let it fail with a clear error
+}
+
+// ────────────────────────────────────────────────
+//  SAMPLE CSV DOWNLOAD
+// ────────────────────────────────────────────────
+function downloadSampleCSV() {
+  const csv = `platform,content_id_or_url,title,publish_date,duration,views,watch_hours,subscribers_gained,revenue_usd,avg_view_duration,impressions,ctr_percent,channel_or_page
+youtube,Y91ETgoRM14,Heart Attack Truth - Telugu Health Tips,4/1/2026,0:05:36,121062,11330,253,63.29,0:05:36,1647055,6.62,SumanTV Health
+youtube,xKl9cTNbdJs,Mutton Health Benefits Telugu,4/1/2026,0:04:50,35647,2879,77,11.84,0:04:50,598463,5.14,SumanTV Health
+youtube,7afGP3yMBs4,Belly Fat Burning Exercises - Sahithi Yoga,4/4/2026,0:01:50,7870,240,18,3.44,0:01:50,109926,6.35,SumanTV Fitness
+instagram,https://www.instagram.com/reel/C5xKpQrIabc/,Sugar Control Tips Telugu Reel,4/1/2026,0:00:45,45200,,,,,,, SumanTV Health IG
+instagram,https://www.instagram.com/reel/C5yLmNsJdef/,Yoga Weight Loss Reel,4/2/2026,0:01:02,38700,,,,,,,SumanTV Fitness IG
+facebook,https://www.facebook.com/watch/?v=1234567890123456,Diabetes Diet Plan Facebook Video,4/1/2026,0:08:15,28500,,,,,,,SumanTV Health FB
+facebook,https://www.facebook.com/watch/?v=2345678901234567,Knee Pain Relief Facebook,4/2/2026,0:05:40,19200,,,,,,,SumanTV Health FB
+twitter,https://twitter.com/SumanTVHealth/status/1774500000000001,Sugar Reverse Tips Tweet,4/1/2026,0:00:58,8900,,,,,,,SumanTV Health Twitter
+twitter,https://twitter.com/SumanTVHealth/status/1774500000000002,Weight Loss Tips Tweet,4/3/2026,0:01:15,5400,,,,,,,SumanTV Health Twitter`;
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'SumanTV_ContentMonitor_Template.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
 
 // ────────────────────────────────────────────────
 //  UI INIT
@@ -1116,7 +1655,7 @@ function addManual() {
 function initUI() {
   if (!allVideos.length) return;
 
-  // Show/hide sections
+  // Hide initial upload splash; show controls + content
   document.getElementById('uploadSection').style.display = 'none';
   document.getElementById('controlsBar').style.display = 'block';
   document.getElementById('contentSection').style.display = 'block';
@@ -1195,15 +1734,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const si = document.getElementById('searchInput');
   if (si) si.addEventListener('input', applyFilters);
 
-  // Drag/drop upload
+  // Drag/drop for initial upload card
   const uc = document.getElementById('uploadCard');
   uc.addEventListener('dragover', e => { e.preventDefault(); uc.classList.add('drag-over'); });
   uc.addEventListener('dragleave', () => uc.classList.remove('drag-over'));
   uc.addEventListener('drop', e => {
     e.preventDefault(); uc.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
-    if (file) { const dt = new DataTransfer(); dt.items.add(file); document.getElementById('csvInput').files = dt.files; handleCSV({ target: { files: [file] } }); }
+    if (file) handleCSV({ target: { files: [file] } });
   });
+
+  // Drag/drop for update panel
+  const ud = document.getElementById('upanelDrop');
+  if (ud) {
+    ud.addEventListener('dragover', e => { e.preventDefault(); ud.classList.add('drag-over'); });
+    ud.addEventListener('dragleave', () => ud.classList.remove('drag-over'));
+    ud.addEventListener('drop', e => {
+      e.preventDefault(); ud.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) handleCSV({ target: { files: [file] } });
+    });
+  }
 });
 
 // ────────────────────────────────────────────────
@@ -1274,24 +1825,41 @@ function renderGrid() {
   section.innerHTML = html;
 }
 
+function getSocialThumbHtml(v) {
+  const icons = { instagram: '📸', facebook: '📘', twitter: '🐦' };
+  const labels = { instagram: 'Instagram', facebook: 'Facebook', twitter: 'Twitter / X' };
+  const shortId = v.url ? v.url.replace(/https?:\/\/(www\.)?/, '').split('/').slice(0,3).join('/') : v.id;
+  return `
+    <div class="social-thumb ${v.platform}">
+      <div class="social-thumb-icon">${icons[v.platform] || '🎬'}</div>
+      <div class="social-thumb-label">${labels[v.platform] || v.platform}</div>
+      <div class="social-thumb-id">${shortId}</div>
+    </div>`;
+}
+
+function getThumbHtml(v) {
+  if (v.platform === 'youtube' && v.thumb) {
+    return `<img src="${v.thumb}" alt="${v.title}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=thumb-fallback>🎬</div>'">`;
+  }
+  return getSocialThumbHtml(v);
+}
+
 function renderCard(v, i) {
-  const perf = maxViews > 0 ? Math.round((v.views/maxViews)*100) : 0;
+  const perf  = maxViews > 0 ? Math.round((v.views / maxViews) * 100) : 0;
   const pIcon = platformIcon(v.platform);
   const pClass = v.platform;
-
-  const thumbHtml = v.thumb
-    ? `<img src="${v.thumb}" alt="${v.title}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=thumb-fallback>🎬</div>'">`
-    : `<div class="thumb-fallback">${pIcon}</div>`;
+  const thumbHtml = getThumbHtml(v);
 
   const durBadge = v.duration && v.duration !== '--'
     ? `<div class="duration-badge">${v.duration}</div>` : '';
-
   const viewsBadge = v.views
     ? `<div class="views-badge">👁 ${fmtNum(v.views)}</div>` : '';
 
+  const vdata = JSON.stringify(v).replace(/"/g, '&quot;');
+
   if (activeView === 'list') {
     return `
-    <div class="vcard list-mode" onclick="openModal(${JSON.stringify(v).replace(/"/g,'&quot;')})">
+    <div class="vcard list-mode" onclick="openModal(${vdata})">
       <div class="thumb-wrap">${thumbHtml}${durBadge}</div>
       <div class="vcard-body">
         <div class="vcard-title">${v.title}</div>
@@ -1306,18 +1874,18 @@ function renderCard(v, i) {
   }
 
   return `
-  <div class="vcard" onclick="openModal(${JSON.stringify(v).replace(/"/g,'&quot;')})" style="animation-delay:${i*0.02}s">
+  <div class="vcard" onclick="openModal(${vdata})" style="animation-delay:${i * 0.02}s">
     <div class="platform-dot ${pClass}">${pIcon}</div>
     <div class="thumb-wrap">
       ${thumbHtml}
-      ${durBadge}
-      ${viewsBadge}
+      ${v.platform === 'youtube' ? durBadge : ''}
+      ${v.platform === 'youtube' ? viewsBadge : ''}
     </div>
     <div class="vcard-body">
       <div class="vcard-title">${v.title}</div>
       <div class="vcard-meta">
-        <span class="meta-pill revenue">${v.revenue ? '$'+v.revenue.toFixed(2) : '—'}</span>
-        <span class="meta-pill">${v.ctr ? v.ctr+'% CTR' : v.platform}</span>
+        <span class="meta-pill revenue">${v.revenue ? '$' + v.revenue.toFixed(2) : '—'}</span>
+        <span class="meta-pill">${v.ctr ? v.ctr + '% CTR' : v.platform}</span>
       </div>
       <div class="perf-bar-wrap">
         <div class="perf-bar" style="width:${perf}%"></div>
@@ -1325,6 +1893,7 @@ function renderCard(v, i) {
     </div>
   </div>`;
 }
+
 
 // ────────────────────────────────────────────────
 //  MODAL
@@ -1336,46 +1905,314 @@ function openModal(v) {
   const statsEl = document.getElementById('modalStats');
   const actEl   = document.getElementById('modalActions');
 
-  // Thumb/embed
+  const closeBtn = `<button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>`;
+
   if (v.platform === 'youtube') {
+    // ── YouTube: embedded player ──
     thumbEl.innerHTML = `
-      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
-      <iframe src="https://www.youtube.com/embed/${v.id}?autoplay=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-  } else {
+      ${closeBtn}
+      <iframe src="https://www.youtube.com/embed/${v.id}?autoplay=0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>`;
+
+  } else if (v.platform === 'instagram') {
+    // ── Instagram: official embed via blockquote + script ──
+    // Extract shortcode from URL: instagram.com/p/SHORTCODE/ or /reel/SHORTCODE/
+    const scMatch = v.url && v.url.match(/instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/);
+    const shortcode = scMatch ? scMatch[1] : null;
+
+    if (shortcode) {
+      thumbEl.style.aspectRatio = 'auto';
+      thumbEl.style.minHeight = '480px';
+      thumbEl.innerHTML = `
+        ${closeBtn}
+        <div class="modal-embed-wrap" style="overflow-y:auto;align-items:flex-start;padding:12px">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/p/${shortcode}/"
+            data-instgrm-version="14"
+            style="width:100%;max-width:540px;margin:0 auto;background:#fff;border-radius:12px;">
+          </blockquote>
+        </div>`;
+      // Load Instagram embed script
+      if (!document.getElementById('ig-embed-script')) {
+        const s = document.createElement('script');
+        s.id = 'ig-embed-script';
+        s.src = '//www.instagram.com/embed.js';
+        s.async = true;
+        document.body.appendChild(s);
+      } else if (window.instgrm) {
+        window.instgrm.Embeds.process();
+      }
+    } else {
+      thumbEl.style.aspectRatio = '16/9';
+      thumbEl.style.minHeight = '';
+      thumbEl.innerHTML = `
+        ${closeBtn}
+        <div class="modal-social-preview instagram">
+          <div class="modal-social-icon">📸</div>
+          <div class="modal-social-title">${v.title || 'Instagram Post'}</div>
+          <div class="modal-social-url">${v.url}</div>
+          <a href="${v.url}" target="_blank" class="modal-open-btn">Open on Instagram ↗</a>
+        </div>`;
+    }
+
+  } else if (v.platform === 'facebook') {
+    // ── Facebook: official embedded video player ──
+    // Works for public facebook.com/watch/?v=VIDEOID or /videos/VIDEOID
+    const fbMatch = v.url && v.url.match(/facebook\.com\/(?:watch\/?\?v=|.*\/videos\/)(\d+)/);
+    if (fbMatch) {
+      const fbVideoId = fbMatch[1];
+      const encodedUrl = encodeURIComponent(v.url);
+      thumbEl.style.aspectRatio = '16/9';
+      thumbEl.style.minHeight = '';
+      thumbEl.innerHTML = `
+        ${closeBtn}
+        <div class="modal-embed-wrap">
+          <iframe
+            src="https://www.facebook.com/plugins/video.php?href=${encodedUrl}&show_text=false&width=640&appId"
+            style="width:100%;height:100%;border:none;overflow:hidden"
+            scrolling="no" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+          </iframe>
+        </div>`;
+    } else {
+      thumbEl.style.aspectRatio = '16/9';
+      thumbEl.innerHTML = `
+        ${closeBtn}
+        <div class="modal-social-preview facebook">
+          <div class="modal-social-icon">📘</div>
+          <div class="modal-social-title">${v.title || 'Facebook Video'}</div>
+          <div class="modal-social-url">${v.url}</div>
+          <a href="${v.url}" target="_blank" class="modal-open-btn">Open on Facebook ↗</a>
+        </div>`;
+    }
+
+  } else if (v.platform === 'twitter') {
+    // ── Twitter/X: official oEmbed (public, no auth) ──
+    thumbEl.style.aspectRatio = 'auto';
+    thumbEl.style.minHeight = '380px';
     thumbEl.innerHTML = `
-      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
-      ${v.thumb ? `<img src="${v.thumb}" style="width:100%;height:100%;object-fit:cover">` : `<div class="thumb-fallback" style="height:300px">${platformIcon(v.platform)}</div>`}`;
+      ${closeBtn}
+      <div class="modal-embed-wrap" id="twitterEmbedWrap" style="overflow-y:auto;align-items:flex-start;padding:16px;background:#000">
+        <div style="text-align:center;color:var(--muted);padding:40px">Loading tweet…</div>
+      </div>`;
+
+    // Use Twitter oEmbed public endpoint (no auth required)
+    const tweetUrl = v.url;
+    const oembed = `https://publish.twitter.com/oembed?url=${encodeURIComponent(tweetUrl)}&theme=dark&dnt=true&omit_script=false`;
+    fetch(oembed)
+      .then(r => r.json())
+      .then(data => {
+        const wrap = document.getElementById('twitterEmbedWrap');
+        if (wrap) {
+          wrap.innerHTML = `<div style="width:100%;max-width:550px;margin:0 auto">${data.html}</div>`;
+          // Load Twitter widgets script
+          if (!document.getElementById('tw-widget-script')) {
+            const s = document.createElement('script');
+            s.id = 'tw-widget-script';
+            s.src = 'https://platform.twitter.com/widgets.js';
+            s.async = true;
+            document.body.appendChild(s);
+          } else if (window.twttr && window.twttr.widgets) {
+            window.twttr.widgets.load();
+          }
+        }
+      })
+      .catch(() => {
+        const wrap = document.getElementById('twitterEmbedWrap');
+        if (wrap) wrap.innerHTML = `
+          <div class="modal-social-preview twitter" style="min-height:300px">
+            <div class="modal-social-icon">🐦</div>
+            <div class="modal-social-title">${v.title || 'Tweet'}</div>
+            <div class="modal-social-url">${v.url}</div>
+            <a href="${v.url}" target="_blank" class="modal-open-btn">Open on Twitter/X ↗</a>
+          </div>`;
+      });
   }
 
-  titleEl.textContent = v.title;
+  titleEl.textContent = v.title || v.url;
 
-  statsEl.innerHTML = `
-    <div class="mstat"><div class="mstat-val" style="color:var(--gold)">${fmtNum(v.views||0)}</div><div class="mstat-label">Views</div></div>
-    <div class="mstat"><div class="mstat-val" style="color:var(--green)">$${(v.revenue||0).toFixed(2)}</div><div class="mstat-label">Revenue</div></div>
-    <div class="mstat"><div class="mstat-val" style="color:var(--blue)">${v.ctr ? v.ctr+'%' : '—'}</div><div class="mstat-label">CTR</div></div>
-    <div class="mstat"><div class="mstat-val">${v.duration||'—'}</div><div class="mstat-label">Duration</div></div>
-    <div class="mstat"><div class="mstat-val" style="color:var(--accent)">${fmtNum(v.impressions||0)}</div><div class="mstat-label">Impressions</div></div>
-    <div class="mstat"><div class="mstat-val">${v.avgDur||'—'}</div><div class="mstat-label">Avg View Dur</div></div>
-    <div class="mstat"><div class="mstat-val" style="color:var(--accent2)">${fmtNum(v.subs||0)}</div><div class="mstat-label">Subs Gained</div></div>
-    <div class="mstat"><div class="mstat-val">${v.date||'—'}</div><div class="mstat-label">Published</div></div>
-  `;
+  // Stats (YouTube has full analytics; others show what we have)
+  if (v.platform === 'youtube') {
+    statsEl.innerHTML = `
+      <div class="mstat"><div class="mstat-val" style="color:var(--gold)">${fmtNum(v.views||0)}</div><div class="mstat-label">Views</div></div>
+      <div class="mstat"><div class="mstat-val" style="color:var(--green)">$${(v.revenue||0).toFixed(2)}</div><div class="mstat-label">Revenue</div></div>
+      <div class="mstat"><div class="mstat-val" style="color:var(--blue)">${v.ctr ? v.ctr+'%' : '—'}</div><div class="mstat-label">CTR</div></div>
+      <div class="mstat"><div class="mstat-val">${v.duration||'—'}</div><div class="mstat-label">Duration</div></div>
+      <div class="mstat"><div class="mstat-val" style="color:var(--accent)">${fmtNum(v.impressions||0)}</div><div class="mstat-label">Impressions</div></div>
+      <div class="mstat"><div class="mstat-val">${v.avgDur||'—'}</div><div class="mstat-label">Avg View Dur</div></div>
+      <div class="mstat"><div class="mstat-val" style="color:var(--accent2)">${fmtNum(v.subs||0)}</div><div class="mstat-label">Subs Gained</div></div>
+      <div class="mstat"><div class="mstat-val">${v.date||'—'}</div><div class="mstat-label">Published</div></div>`;
+  } else {
+    const pColors = { instagram: '#E1306C', facebook: '#1877F2', twitter: '#1DA1F2' };
+    const col = pColors[v.platform] || 'var(--muted2)';
+    statsEl.innerHTML = `
+      <div class="mstat"><div class="mstat-val" style="color:${col}">${v.platform.toUpperCase()}</div><div class="mstat-label">Platform</div></div>
+      <div class="mstat"><div class="mstat-val">${v.date||'—'}</div><div class="mstat-label">Published</div></div>
+      <div class="mstat"><div class="mstat-val" style="color:var(--gold)">${v.views ? fmtNum(v.views) : '—'}</div><div class="mstat-label">Views</div></div>
+      <div class="mstat"><div class="mstat-val">${v._manual ? 'Manual' : 'CSV'}</div><div class="mstat-label">Source</div></div>`;
+  }
 
+  // Actions
+  const platformLabel = v.platform.charAt(0).toUpperCase() + v.platform.slice(1);
+  const icons = { youtube: '▶', instagram: '📸', facebook: '📘', twitter: '🐦' };
   actEl.innerHTML = `
-    <a href="${v.url}" target="_blank" class="modal-btn primary">▶ Watch on ${v.platform.charAt(0).toUpperCase()+v.platform.slice(1)}</a>
-    ${v.platform==='youtube' ? `<a href="https://studio.youtube.com/video/${v.id}/analytics" target="_blank" class="modal-btn">📊 Analytics</a>` : ''}
-    <button class="modal-btn" onclick="navigator.clipboard.writeText('${v.url}');this.textContent='✓ Copied!'">🔗 Copy URL</button>
-  `;
+    <a href="${v.url}" target="_blank" class="modal-btn primary">${icons[v.platform]||'↗'} Open on ${platformLabel}</a>
+    ${v.platform === 'youtube' ? `<a href="https://studio.youtube.com/video/${v.id}/analytics" target="_blank" class="modal-btn">📊 Analytics</a>` : ''}
+    <button class="modal-btn" onclick="navigator.clipboard.writeText('${v.url}');this.textContent='✓ Copied!'">🔗 Copy URL</button>`;
 
   overlay.classList.add('open');
 }
 
+
 function closeModal(e) {
-  if (e.target === document.getElementById('modalOverlay'))
+  if (e.target === document.getElementById('modalOverlay')) {
     document.getElementById('modalOverlay').classList.remove('open');
+    // Reset dynamic height set for IG/Twitter embeds
+    const th = document.getElementById('modalThumb');
+    th.style.aspectRatio = '';
+    th.style.minHeight = '';
+  }
 }
 
+
+// ────────────────────────────────────────────────
+//  UPDATE PANEL TOGGLE
+// ────────────────────────────────────────────────
+function toggleUpdatePanel() {
+  const panel = document.getElementById('updatePanel');
+  const btn   = document.getElementById('updateToggleBtn');
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  btn.classList.toggle('active', !isOpen);
+  btn.textContent = isOpen ? '⬆ Update Data' : '✕ Close Panel';
+}
+
+// ────────────────────────────────────────────────
+//  DUPLICATE TOAST
+// ────────────────────────────────────────────────
+let _dupToastTimer = null;
+function showDupToast(title, sub) {
+  const toast = document.getElementById('dupToast');
+  document.getElementById('dupToastTitle').textContent = title;
+  document.getElementById('dupToastSub').textContent   = sub;
+  toast.classList.add('show');
+  clearTimeout(_dupToastTimer);
+  _dupToastTimer = setTimeout(hideDupToast, 8000);
+}
+
+function hideDupToast() {
+  document.getElementById('dupToast').classList.remove('show');
+}
+
+// ────────────────────────────────────────────────
+//  DUPLICATE REPORT MODAL
+// ────────────────────────────────────────────────
+function showDupReport() {
+  hideDupToast();
+  const log  = window._lastDupLog || [];
+  const body = document.getElementById('dupModalBody');
+
+  if (!log.length) {
+    body.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px 0">No duplicates in the last upload.</p>';
+  } else {
+    const skipped = log.filter(d => d.action === 'skipped');
+    const updated = log.filter(d => d.action === 'updated');
+
+    let html = '';
+    if (updated.length) {
+      html += `<p style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">✓ Updated (${updated.length}) — fresher data merged</p>`;
+      updated.forEach(d => {
+        html += dupRow(d.video, 'updated', `Old views: ${fmtNum(d.oldViews)} → New: ${fmtNum(d.video.views)}`);
+      });
+    }
+    if (skipped.length) {
+      html += `<p style="font-size:12px;font-weight:600;color:var(--accent);margin:16px 0 10px;text-transform:uppercase;letter-spacing:1px">⊘ Skipped (${skipped.length}) — identical or older data</p>`;
+      skipped.forEach(d => {
+        html += dupRow(d.video, 'skipped', `Views unchanged: ${fmtNum(d.video.views)}`);
+      });
+    }
+    body.innerHTML = html;
+  }
+
+  document.getElementById('dupModalOverlay').classList.add('open');
+}
+
+function dupRow(v, action, meta) {
+  const thumb = v.thumb
+    ? `<img class="dup-thumb" src="${v.thumb}" alt="" onerror="this.style.background='var(--surface2)'">`
+    : `<div class="dup-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px">🎬</div>`;
+  return `
+  <div class="dup-item">
+    ${thumb}
+    <div class="dup-info">
+      <div class="dup-title">${v.title || v.id}</div>
+      <div class="dup-meta">${v.id} · ${v.date} · ${meta}</div>
+    </div>
+    <span class="dup-badge ${action}">${action === 'updated' ? '✓ Updated' : '⊘ Skipped'}</span>
+  </div>`;
+}
+
+function closeDupModal(e) {
+  if (e.target === document.getElementById('dupModalOverlay'))
+    document.getElementById('dupModalOverlay').classList.remove('open');
+}
+
+function saveSheetsUrlFromPanel() {
+  const val = (document.getElementById('sheetsUrlInput2').value || '').trim();
+  if (!val) { alert('Please paste your Google Sheets CSV export URL'); return; }
+  sheetsUrl = val;
+  const i1 = document.getElementById('sheetsUrlInput');
+  if (i1) i1.value = val;
+  localStorage.setItem('stv_sheets_url', sheetsUrl);
+  fetchFromSheets();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Restore saved Sheets URL into both inputs
+  const saved = localStorage.getItem('stv_sheets_url');
+  if (saved) {
+    sheetsUrl = saved;
+    const i1 = document.getElementById('sheetsUrlInput');
+    const i2 = document.getElementById('sheetsUrlInput2');
+    if (i1) i1.value = saved;
+    if (i2) i2.value = saved;
+    const s = document.getElementById('sheetsSyncStatus');
+    if (s) { s.textContent = '● Connected'; s.style.color = 'var(--green)'; }
+  }
+
+  const si = document.getElementById('searchInput');
+  if (si) si.addEventListener('input', applyFilters);
+
+  // Drag/drop for initial upload card
+  const uc = document.getElementById('uploadCard');
+  if (uc) {
+    uc.addEventListener('dragover', e => { e.preventDefault(); uc.classList.add('drag-over'); });
+    uc.addEventListener('dragleave', () => uc.classList.remove('drag-over'));
+    uc.addEventListener('drop', e => {
+      e.preventDefault(); uc.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) handleCSV({ target: { files: [file] } });
+    });
+  }
+
+  // Drag/drop for update panel drop zone
+  const ud = document.getElementById('upanelDrop');
+  if (ud) {
+    ud.addEventListener('dragover', e => { e.preventDefault(); ud.classList.add('drag-over'); });
+    ud.addEventListener('dragleave', () => ud.classList.remove('drag-over'));
+    ud.addEventListener('drop', e => {
+      e.preventDefault(); ud.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) handleCSV({ target: { files: [file] } });
+    });
+  }
+});
+
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
+  if (e.key === 'Escape') {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.getElementById('dupModalOverlay').classList.remove('open');
+  }
 });
 </script>
 </body>

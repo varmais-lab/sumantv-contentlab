@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SumanTV — Team Directory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #06070d;
+  --bg2:       #0c0d17;
+  --surface:   #10111e;
+  --surface2:  #161828;
+  --border:    #1e2038;
+  --border2:   #252842;
+  --text:      #e8eaf6;
+  --muted:     #4a4e7a;
+  --muted2:    #7880b0;
+  --accent:    #e8432d;
+  --accent2:   #ff6b47;
+  --gold:      #f5c842;
+  --teal:      #00d4aa;
+  --blue:      #4f8ef7;
+  --glow:      rgba(232,67,45,0.18);
+
+  /* dept colors */
+  --c-exec:   #e8432d;
+  --c-content:#f97316;
+  --c-prod:   #a855f7;
+  --c-tech:   #3b82f6;
+  --c-mkt:    #ec4899;
+  --c-hr:     #22c55e;
+  --c-design: #f5c842;
+  --c-fin:    #00d4aa;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  height: 100%;
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ── HEADER ── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  background: rgba(6,7,13,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 20px;
+  z-index: 200;
+}
+
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: 1px;
+}
+
+.logo-sub {
+  font-size: 10px;
+  color: var(--muted2);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.header-mid {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--muted2);
+  max-width: 600px;
+  overflow: hidden;
+}
+
+.bc-item {
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s;
+  color: var(--muted2);
+}
+.bc-item:hover { color: var(--text); }
+.bc-item.active { color: var(--text); font-weight: 600; }
+.bc-sep { color: var(--muted); font-size: 10px; }
+
+/* Search */
+.search-wrap {
+  position: relative;
+}
+.search-wrap input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 7px 12px 7px 32px;
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  width: 200px;
+  outline: none;
+  transition: border-color 0.2s, width 0.3s;
+}
+.search-wrap input:focus { border-color: var(--accent); width: 260px; }
+.search-wrap svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:0.4; pointer-events:none; }
+
+/* Stats pills */
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: 11px;
+  color: var(--muted2);
+  white-space: nowrap;
+}
+.stat-pill strong { color: var(--text); font-family: 'JetBrains Mono', monospace; }
+
+/* Upload btn */
+.upload-btn {
+  padding: 7px 14px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.upload-btn:hover { background: var(--accent2); }
+.upload-btn input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+
+/* ── MAIN ── */
+main {
+  position: fixed;
+  inset: 60px 0 0 0;
+  overflow: hidden;
+}
+
+/* ── CANVAS / PAN AREA ── */
+#canvas {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  cursor: grab;
+  position: relative;
+}
+#canvas:active { cursor: grabbing; }
+
+#treeWrap {
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 64px 120px;
+  position: relative;
+}
+
+/* ── DEPT LEGEND ── */
+.dept-legend {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(10,11,20,0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.legend-title {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--muted2);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.legend-item:hover { color: var(--text); }
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── CONTROLS ── */
+.zoom-controls {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 100;
+}
+.zoom-btn {
+  width: 34px; height: 34px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.zoom-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── NODE ── */
+.node-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* ── CONNECTORS — all drawn as real DOM divs, no pseudo-elements ── */
+.children-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* vertical stem from parent card down to the h-bar row */
+.connector-stem-down {
+  width: 2px;
+  height: 24px;
+  background: var(--border2);
+  flex-shrink: 0;
+}
+
+/* row that holds: left-cap + h-bar + right-cap  */
+.connector-h-row {
+  display: flex;
+  align-items: center;
+  width: 100%;       /* will be constrained by children-bar width */
+}
+
+/* the actual horizontal line — width driven by JS */
+.connector-h-bar {
+  height: 2px;
+  background: var(--border2);
+  flex: 1;           /* fills between first and last child centre */
+}
+
+/* children row */
+.children-bar {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+}
+
+.child-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* vertical drop from h-bar down to each child card */
+.connector-stem-child {
+  width: 2px;
+  height: 24px;
+  background: var(--border2);
+  flex-shrink: 0;
+}
+
+/* ── CARD ── */
+.person-card {
+  width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.2s,
+              border-color 0.2s;
+  animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+  user-select: none;
+}
+
+.person-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  border-color: var(--border2);
+}
+
+.person-card.has-children {
+  border-color: var(--border2);
+}
+
+.person-card.has-children:hover {
+  border-color: var(--accent);
+  box-shadow: 0 16px 48px var(--glow);
+}
+
+.person-card.root {
+  width: 160px;
+  border-color: var(--accent);
+  background: linear-gradient(145deg, #1a0f0d, #1e1210);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 32px rgba(232,67,45,0.25);
+}
+
+/* Dept accent stripe */
+.card-stripe {
+  position: absolute;
+  top: 0; left: 16px; right: 16px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+}
+
+/* Photo */
+.person-photo {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border2);
+  background: var(--surface2);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.person-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.photo-initials {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 50%;
+}
+
+.person-card.root .person-photo {
+  width: 68px; height: 68px;
+}
+
+.person-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 11.5px;
+  text-align: center;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.person-card.root .person-name {
+  font-size: 13px;
+}
+
+.person-title {
+  font-size: 9.5px;
+  color: var(--muted2);
+  text-align: center;
+  line-height: 1.4;
+  max-width: 120px;
+}
+
+.person-dept {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+}
+
+/* child count badge */
+.child-badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: var(--accent);
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* expand indicator */
+.expand-indicator {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  color: var(--muted2);
+  transition: all 0.2s;
+  margin-top: -4px;
+}
+
+.person-card:hover .expand-indicator {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(232,67,45,0.1);
+}
+
+.person-card.expanded .expand-indicator {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  transform: rotate(180deg);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes popIn {
+  0%   { opacity:0; transform: scale(0.6) translateY(20px); }
+  100% { opacity:1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fadeSlideDown {
+  0%   { opacity:0; transform: translateY(-16px); }
+  100% { opacity:1; transform: translateY(0); }
+}
+
+.children-wrap {
+  animation: fadeSlideDown 0.3s ease both;
+}
+
+/* ── PROFILE MODAL ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  backdrop-filter: blur(8px);
+}
+.overlay.open { opacity:1; pointer-events:all; }
+
+.profile-modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+}
+.overlay.open .profile-modal { transform: scale(1) translateY(0); }
+
+.modal-banner {
+  height: 80px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 24px 0;
+}
+
+.modal-photo-wrap {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--bg);
+  overflow: hidden;
+  background: var(--surface2);
+  margin-bottom: -40px;
+  z-index: 2;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.modal-photo-wrap img, .modal-photo-wrap .photo-initials {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.modal-body {
+  padding: 48px 24px 24px;
+}
+
+.modal-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.modal-title {
+  font-size: 13px;
+  color: var(--muted2);
+  margin-bottom: 14px;
+}
+
+.modal-dept-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.06);
+  margin-bottom: 20px;
+}
+
+.modal-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.info-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.info-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.info-value {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.info-value a {
+  color: var(--blue);
+  text-decoration: none;
+}
+.info-value a:hover { text-decoration: underline; }
+
+.modal-social {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.social-btn {
+  flex: 1;
+  padding: 9px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted2);
+  font-size: 11px;
+  font-family: 'Sora', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+.social-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 11px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.modal-btn:hover { border-color: var(--muted2); }
+.modal-btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+.modal-btn.primary:hover { background: var(--accent2); }
+
+.modal-close-btn {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.4);
+  border: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 3;
+}
+
+/* ── UPLOAD SPLASH ── */
+#uploadSplash {
+  position: fixed;
+  inset: 60px 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  background: var(--bg);
+}
+
+.splash-inner {
+  max-width: 640px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.splash-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--muted2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.splash-sub {
+  font-size: 14px;
+  color: var(--muted2);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.drop-zone {
+  border: 2px dashed var(--border2);
+  border-radius: 20px;
+  padding: 48px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  background: var(--surface);
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--accent);
+  background: rgba(232,67,45,0.05);
+  box-shadow: 0 0 40px rgba(232,67,45,0.1);
+}
+.drop-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+.drop-icon { font-size: 48px; margin-bottom: 14px; }
+.drop-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+.drop-sub { font-size: 13px; color: var(--muted2); line-height: 1.6; }
+
+.splash-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.splash-btn {
+  flex: 1;
+  padding: 13px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.splash-btn:hover { border-color: var(--muted2); }
+.splash-btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+.splash-btn.primary:hover { background: var(--accent2); }
+
+/* csv format hint */
+.format-hint {
+  margin-top: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 11px;
+  color: var(--muted2);
+  line-height: 1.8;
+}
+.format-hint strong { color: var(--text); }
+.format-hint code { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--teal); }
+
+/* ── SEARCH RESULTS OVERLAY ── */
+.search-results {
+  position: fixed;
+  top: 68px;
+  right: 180px;
+  width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  z-index: 300;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  display: none;
+}
+.search-results.show { display:block; }
+.sr-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+  border-bottom: 1px solid var(--border);
+}
+.sr-item:last-child { border-bottom: none; }
+.sr-item:hover { background: var(--surface2); }
+.sr-photo-sm {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--surface2);
+}
+.sr-name { font-size: 12px; font-weight: 600; }
+.sr-dept { font-size: 10px; color: var(--muted2); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* ── GOOGLE SHEETS PANEL ── */
+.sheets-panel { margin-top:16px; background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.sheets-panel-header { display:flex; align-items:center; gap:10px; padding:14px 18px; cursor:pointer; user-select:none; }
+.sheets-panel-header:hover { background:var(--surface2); }
+.sheets-panel-icon { width:28px;height:28px;background:#1a7f4e;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0; }
+.sheets-panel-title { font-size:13px;font-weight:600;flex:1; }
+.sheets-panel-status { font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace; }
+.sheets-panel-arrow { font-size:11px;color:var(--muted);transition:transform 0.2s; }
+.sheets-panel.open .sheets-panel-arrow { transform:rotate(180deg); }
+.sheets-panel-body { display:none;padding:0 18px 18px;border-top:1px solid var(--border); }
+.sheets-panel.open .sheets-panel-body { display:block; }
+.sheets-url-row { display:flex;gap:8px;margin-top:14px;margin-bottom:10px; }
+.sheets-url-input { flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 14px;font-family:'Sora',sans-serif;font-size:12px;outline:none;transition:border-color 0.2s; }
+.sheets-url-input:focus { border-color:#1a7f4e; }
+.sheets-url-input::placeholder { color:var(--muted); }
+.sheets-btn { padding:9px 16px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.15s; }
+.sheets-btn.green { background:#1a7f4e;color:white; }
+.sheets-btn.green:hover { background:#22a360; }
+.sheets-btn.ghost { background:var(--surface2);color:var(--muted2);border:1px solid var(--border); }
+.sheets-btn.ghost:hover { border-color:var(--muted2);color:var(--text); }
+.sheets-steps { background:var(--surface2);border-radius:10px;padding:12px 14px;margin-top:8px; }
+.sheets-steps-title { font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px; }
+.sheets-step { display:flex;gap:10px;align-items:flex-start;margin-bottom:6px;font-size:11px;color:var(--muted2);line-height:1.5; }
+.sheets-step:last-child { margin-bottom:0; }
+.step-num { width:18px;height:18px;border-radius:50%;background:var(--border2);color:var(--muted2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px; }
+.sheets-step strong { color:var(--text); }
+.sheets-step code { font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal); }
+.sync-btn { padding:7px 14px;border-radius:8px;border:1px solid #1a7f4e;background:rgba(26,127,78,0.12);color:#22c55e;font-family:'Sora',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.15s;display:none;align-items:center;gap:6px; }
+.sync-btn.visible { display:flex; }
+.sync-btn:hover { background:rgba(26,127,78,0.25); }
+.sync-btn.syncing { opacity:0.6;pointer-events:none; }
+.sync-toast { position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 20px;display:flex;align-items:center;gap:10px;z-index:600;box-shadow:0 12px 40px rgba(0,0,0,0.6);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);font-size:13px;white-space:nowrap; }
+.sync-toast.show { transform:translateX(-50%) translateY(0); }
+.sync-toast.success { border-color:#1a7f4e; }
+.sync-toast.error { border-color:var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="logo-mark">STV</div>
+    <div>
+      <div class="logo-text">SumanTV</div>
+      <div class="logo-sub">Team Directory</div>
+    </div>
+  </div>
+
+  <div class="header-mid">
+    <div class="breadcrumb" id="breadcrumb">
+      <span class="bc-item active" data-id="root">🏠 All Teams</span>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="stat-pill"><strong id="statTotal">0</strong> members</div>
+    <div class="stat-pill" id="statDepts"></div>
+
+    <div class="search-wrap">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search name or dept…" oninput="handleSearch(this.value)" onfocus="showSearchResults()" onblur="setTimeout(hideSearchResults,200)">
+    </div>
+
+    <button class="sync-btn" id="syncBtn" onclick="syncFromSheets()" title="Re-sync from Google Sheets">
+      <span id="syncIcon">⟳</span> Sync Sheets
+    </button>
+
+    <label class="upload-btn" style="cursor:pointer">
+      ⬆ Load CSV
+      <input type="file" accept=".csv" onchange="handleCSV(event)" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+    </label>
+  </div>
+</header>
+
+<!-- TOAST -->
+<div class="sync-toast" id="syncToast"></div>
+
+<!-- SEARCH RESULTS -->
+<div class="search-results" id="searchResults"></div>
+
+<!-- UPLOAD SPLASH -->
+<div id="uploadSplash">
+  <div class="splash-inner">
+    <div class="splash-title">SumanTV<br>Team Directory</div>
+    <div class="splash-sub">Connect your Google Sheet or upload a CSV to explore the full organisation hierarchy with animated drill-down navigation.</div>
+
+    <div class="drop-zone" id="dropZone">
+      <input type="file" accept=".csv" onchange="handleCSV(event)" id="csvMain">
+      <div class="drop-icon">👥</div>
+      <div class="drop-title">Drop your Team CSV here</div>
+      <div class="drop-sub">or click to browse · Supports 500+ members<br>
+      <span style="color:var(--muted);font-size:12px">Required columns: <strong style="color:var(--muted2)">id, name, title, department, reports_to</strong></span></div>
+    </div>
+
+    <div class="splash-actions">
+      <button class="splash-btn" onclick="loadSampleData()">👀 Load Sample Data</button>
+      <button class="splash-btn primary" onclick="document.getElementById('csvMain').click()">📁 Choose CSV File</button>
+    </div>
+
+    <!-- GOOGLE SHEETS PANEL -->
+    <div class="sheets-panel" id="sheetsPanel">
+      <div class="sheets-panel-header" onclick="toggleSheetsPanel()">
+        <div class="sheets-panel-icon">📗</div>
+        <div class="sheets-panel-title">Connect Google Sheets</div>
+        <div class="sheets-panel-status" id="sheetsPanelStatus">Not connected</div>
+        <div class="sheets-panel-arrow">▼</div>
+      </div>
+      <div class="sheets-panel-body">
+        <div class="sheets-url-row">
+          <input class="sheets-url-input" id="sheetsUrlInput" placeholder="Paste your Google Sheets published CSV URL…" />
+          <button class="sheets-btn green" onclick="connectSheets()">Connect &amp; Load</button>
+          <button class="sheets-btn ghost" id="sheetsClearBtn" onclick="clearSheets()" style="display:none">✕ Clear</button>
+        </div>
+
+        <div class="sheets-steps">
+          <div class="sheets-steps-title">How to get the URL from Google Sheets</div>
+          <div class="sheets-step"><div class="step-num">1</div><div>Open your team Google Sheet</div></div>
+          <div class="sheets-step"><div class="step-num">2</div><div>Go to <strong>File → Share → Publish to web</strong></div></div>
+          <div class="sheets-step"><div class="step-num">3</div><div>Select your sheet tab, change format to <strong>Comma-separated values (.csv)</strong></div></div>
+          <div class="sheets-step"><div class="step-num">4</div><div>Click <strong>Publish</strong>, copy the URL and paste it above</div></div>
+          <div class="sheets-step"><div class="step-num">5</div><div>The URL will look like: <code>https://docs.google.com/spreadsheets/d/…/pub?output=csv</code></div></div>
+          <div class="sheets-step"><div class="step-num">6</div><div>After connecting, use the <strong>⟳ Sync Sheets</strong> button in the header to refresh anytime</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="format-hint">
+      <strong>CSV Columns:</strong> <code>id</code>, <code>name</code>, <code>title</code>, <code>department</code>, <code>reports_to</code> (parent id), <code>photo</code> (URL), <code>location</code>, <code>contact</code>, <code>email</code>, <code>linkedin</code>, <code>instagram</code>, <code>twitter</code>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN ORG CANVAS -->
+<main id="mainCanvas" style="display:none">
+  <div id="canvas">
+    <div id="treeWrap"></div>
+  </div>
+  <div class="dept-legend" id="deptLegend"></div>
+  <div class="zoom-controls">
+    <button class="zoom-btn" onclick="zoom(1.15)" title="Zoom in">+</button>
+    <button class="zoom-btn" onclick="zoom(0.87)" title="Zoom out">−</button>
+    <button class="zoom-btn" onclick="resetZoom()" title="Reset" style="font-size:11px">⌂</button>
+  </div>
+</main>
+
+<!-- PROFILE MODAL -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="profile-modal" id="profileModal">
+    <button class="modal-close-btn" onclick="document.getElementById('overlay').classList.remove('open')">✕</button>
+    <div class="modal-banner" id="modalBanner"></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+
+<script>
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+var people       = [];
+var expandedIds  = {};   // id -> true
+var currentScale = 1;
+var isDragging   = false;
+var dragStartX, dragStartY, dragScrollLeft, dragScrollTop;
+
+// ─────────────────────────────────────────────
+//  DEPARTMENT COLORS
+// ─────────────────────────────────────────────
+var DEPT_COLORS = {
+  'executive':       '#e8432d',
+  'content':         '#f97316',
+  'production':      '#a855f7',
+  'technology':      '#3b82f6',
+  'marketing':       '#ec4899',
+  'human resources': '#22c55e',
+  'design':          '#f5c842',
+  'finance':         '#00d4aa'
+};
+
+function getDeptColor(dept) {
+  if (!dept) return '#4a4e7a';
+  var key = dept.toLowerCase();
+  var keys = Object.keys(DEPT_COLORS);
+  for (var i = 0; i < keys.length; i++) {
+    if (key.indexOf(keys[i]) !== -1) return DEPT_COLORS[keys[i]];
+  }
+  var hash = 0;
+  for (var j = 0; j < dept.length; j++) hash = dept.charCodeAt(j) + ((hash << 5) - hash);
+  return 'hsl(' + (Math.abs(hash) % 360) + ',60%,55%)';
+}
+
+function getInitials(name) {
+  var parts = name.trim().split(/\s+/);
+  return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+}
+
+// ─────────────────────────────────────────────
+//  CSV FILE HANDLING
+// ─────────────────────────────────────────────
+function handleCSV(e) {
+  var file = e.target.files && e.target.files[0];
+  if (!file) return;
+  e.target.value = '';          // allow re-selecting same file
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    parsePeopleCSV(ev.target.result);
+  };
+  reader.onerror = function() {
+    alert('Could not read the file. Please try again.');
+  };
+  reader.readAsText(file);
+}
+
+// ─────────────────────────────────────────────
+//  CSV PARSER  (handles quoted fields)
+// ─────────────────────────────────────────────
+function splitCSVLine(line) {
+  var result = [];
+  var cur = '';
+  var inQ = false;
+  for (var i = 0; i < line.length; i++) {
+    var ch = line[i];
+    if (ch === '"') { inQ = !inQ; }
+    else if (ch === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
+    else { cur += ch; }
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function parsePeopleCSV(text) {
+  var lines = text.replace(/\r/g, '').split('\n');
+  var nonEmpty = [];
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i].trim()) nonEmpty.push(lines[i]);
+  }
+  if (nonEmpty.length < 2) {
+    alert('CSV appears empty or has only one row. Please check the file.');
+    return;
+  }
+
+  var headers = splitCSVLine(nonEmpty[0]);
+  for (var h = 0; h < headers.length; h++) {
+    headers[h] = headers[h].toLowerCase().replace(/[^a-z0-9_]/g, '_');
+  }
+
+  function col(row, name) {
+    var idx = headers.indexOf(name);
+    return (idx >= 0 && row[idx]) ? row[idx].trim() : '';
+  }
+
+  var parsed = [];
+  for (var r = 1; r < nonEmpty.length; r++) {
+    var cols = splitCSVLine(nonEmpty[r]);
+    var id   = col(cols, 'id');
+    var name = col(cols, 'name');
+    if (!id || !name) continue;
+    parsed.push({
+      id:         id,
+      name:       name,
+      title:      col(cols, 'title'),
+      department: col(cols, 'department'),
+      reportsTo:  col(cols, 'reports_to'),
+      photo:      col(cols, 'photo'),
+      location:   col(cols, 'location'),
+      contact:    col(cols, 'contact'),
+      email:      col(cols, 'email'),
+      linkedin:   col(cols, 'linkedin'),
+      instagram:  col(cols, 'instagram'),
+      twitter:    col(cols, 'twitter')
+    });
+  }
+
+  if (parsed.length === 0) {
+    alert('No valid rows found. Make sure your CSV has "id" and "name" columns.');
+    return;
+  }
+
+  people = parsed;
+  initTree();
+}
+
+// ─────────────────────────────────────────────
+//  TREE INIT
+// ─────────────────────────────────────────────
+function initTree() {
+  expandedIds = {};
+  currentScale = 1;
+
+  var root = findRoot();
+  if (root) expandedIds[root.id] = true;
+
+  document.getElementById('uploadSplash').style.display = 'none';
+  document.getElementById('mainCanvas').style.display  = 'block';
+
+  updateStats();
+  buildLegend();
+  renderTree();
+  updateBreadcrumb();
+}
+
+function findRoot() {
+  var idSet = {};
+  for (var i = 0; i < people.length; i++) idSet[people[i].id] = true;
+  for (var j = 0; j < people.length; j++) {
+    var p = people[j];
+    if (!p.reportsTo || !idSet[p.reportsTo]) return p;
+  }
+  return people[0];
+}
+
+function getChildren(parentId) {
+  var result = [];
+  for (var i = 0; i < people.length; i++) {
+    if (people[i].reportsTo === String(parentId)) result.push(people[i]);
+  }
+  return result;
+}
+
+function getTotalDescendants(id) {
+  var children = getChildren(id);
+  var count = children.length;
+  for (var i = 0; i < children.length; i++) count += getTotalDescendants(children[i].id);
+  return count;
+}
+
+// ─────────────────────────────────────────────
+//  RENDER
+// ─────────────────────────────────────────────
+function renderTree() {
+  var wrap = document.getElementById('treeWrap');
+  wrap.innerHTML = '';
+
+  var root = findRoot();
+  if (!root) return;
+
+  wrap.appendChild(buildNodeEl(root, true));
+
+  // Draw horizontal connectors after layout settles
+  window.requestAnimationFrame(function() {
+    window.requestAnimationFrame(drawConnectors);
+  });
+}
+
+function buildNodeEl(person, isRoot) {
+  var col = document.createElement('div');
+  col.className = 'node-col';
+
+  col.appendChild(createCard(person, isRoot));
+
+  var children   = getChildren(person.id);
+  var isExpanded = expandedIds[person.id];
+
+  if (children.length && isExpanded) {
+    var wrap = document.createElement('div');
+    wrap.className = 'children-wrap';
+
+    // vertical stem down
+    var stemDown = document.createElement('div');
+    stemDown.className = 'connector-stem-down';
+    wrap.appendChild(stemDown);
+
+    // children bar
+    var bar = document.createElement('div');
+    bar.className = 'children-bar';
+    bar.setAttribute('data-parent', person.id);
+
+    for (var i = 0; i < children.length; i++) {
+      var childCol = document.createElement('div');
+      childCol.className = 'child-col';
+      childCol.style.padding = '0 10px';
+
+      // vertical stem from bar to child
+      var stemChild = document.createElement('div');
+      stemChild.className = 'connector-stem-child';
+      childCol.appendChild(stemChild);
+
+      childCol.appendChild(buildNodeEl(children[i], false));
+      bar.appendChild(childCol);
+    }
+
+    wrap.appendChild(bar);
+    col.appendChild(wrap);
+  }
+
+  return col;
+}
+
+function createCard(person, isRoot) {
+  var color       = getDeptColor(person.department);
+  var children    = getChildren(person.id);
+  var isExpanded  = expandedIds[person.id];
+  var descendants = getTotalDescendants(person.id);
+
+  var card = document.createElement('div');
+  var cls  = 'person-card';
+  if (isRoot)           cls += ' root';
+  if (children.length)  cls += ' has-children';
+  if (isExpanded)       cls += ' expanded';
+  card.className = cls;
+  card.setAttribute('data-id', person.id);
+
+  // Coloured stripe
+  var stripe = document.createElement('div');
+  stripe.className = 'card-stripe';
+  stripe.style.background = color;
+  card.appendChild(stripe);
+
+  // Descendant badge
+  if (descendants > 0) {
+    var badge = document.createElement('div');
+    badge.className = 'child-badge';
+    badge.textContent = descendants > 99 ? '99+' : String(descendants);
+    card.appendChild(badge);
+  }
+
+  // Photo / initials
+  var photoWrap = document.createElement('div');
+  photoWrap.className = 'person-photo';
+  if (person.photo && person.photo.indexOf('http') === 0) {
+    var img = document.createElement('img');
+    img.src = person.photo;
+    img.alt = person.name;
+    img.onerror = function() {
+      photoWrap.innerHTML = '<div class="photo-initials" style="background:linear-gradient(135deg,' + color + '33,' + color + '66)">' + getInitials(person.name) + '</div>';
+    };
+    photoWrap.appendChild(img);
+  } else {
+    var initDiv = document.createElement('div');
+    initDiv.className = 'photo-initials';
+    initDiv.style.background = 'linear-gradient(135deg,' + color + '33,' + color + '66)';
+    initDiv.textContent = getInitials(person.name);
+    photoWrap.appendChild(initDiv);
+  }
+  card.appendChild(photoWrap);
+
+  // Name
+  var nameEl = document.createElement('div');
+  nameEl.className = 'person-name';
+  nameEl.textContent = person.name;
+  card.appendChild(nameEl);
+
+  // Dept tag
+  var deptEl = document.createElement('div');
+  deptEl.className = 'person-dept';
+  deptEl.style.color = color;
+  deptEl.textContent = person.department || '';
+  card.appendChild(deptEl);
+
+  // Expand indicator
+  if (children.length) {
+    var expEl = document.createElement('div');
+    expEl.className = 'expand-indicator';
+    expEl.textContent = isExpanded ? '▲' : '▼';
+    card.appendChild(expEl);
+  }
+
+  // Click = toggle expand / open profile
+  card.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (children.length) {
+      if (expandedIds[person.id]) {
+        collapseAll(person.id);
+      } else {
+        expandedIds[person.id] = true;
+      }
+      renderTree();
+    } else {
+      openProfile(person);
+    }
+  });
+
+  // Double-click = always open profile
+  card.addEventListener('dblclick', function(e) {
+    e.stopPropagation();
+    openProfile(person);
+  });
+
+  return card;
+}
+
+function collapseAll(id) {
+  delete expandedIds[id];
+  var children = getChildren(id);
+  for (var i = 0; i < children.length; i++) collapseAll(children[i].id);
+}
+
+// ─────────────────────────────────────────────
+//  DRAW HORIZONTAL CONNECTORS
+// ─────────────────────────────────────────────
+function drawConnectors() {
+  // Remove old connector lines
+  var old = document.querySelectorAll('.connector-h-line');
+  for (var o = 0; o < old.length; o++) old[o].parentNode.removeChild(old[o]);
+
+  var bars = document.querySelectorAll('.children-bar');
+  for (var b = 0; b < bars.length; b++) {
+    var bar  = bars[b];
+    var cols = bar.querySelectorAll(':scope > .child-col');
+    if (cols.length < 2) continue;
+
+    var wrap      = bar.parentElement;        // .children-wrap
+    var wrapRect  = wrap.getBoundingClientRect();
+    var firstRect = cols[0].getBoundingClientRect();
+    var lastRect  = cols[cols.length - 1].getBoundingClientRect();
+
+    var leftPx  = firstRect.left + firstRect.width  / 2 - wrapRect.left;
+    var rightPx = lastRect.left  + lastRect.width   / 2 - wrapRect.left;
+    var width   = rightPx - leftPx;
+
+    if (width <= 0) continue;
+
+    var line = document.createElement('div');
+    line.className = 'connector-h-line';
+    line.style.position   = 'absolute';
+    line.style.top        = '23px';        // sits at bottom of the 24px stem-down
+    line.style.left       = leftPx  + 'px';
+    line.style.width      = width   + 'px';
+    line.style.height     = '2px';
+    line.style.background = 'var(--border2)';
+    line.style.pointerEvents = 'none';
+
+    wrap.style.position = 'relative';
+    wrap.appendChild(line);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  PROFILE MODAL
+// ─────────────────────────────────────────────
+function openProfile(person) {
+  var color       = getDeptColor(person.department);
+  var children    = getChildren(person.id);
+  var descendants = getTotalDescendants(person.id);
+
+  var banner = document.getElementById('modalBanner');
+  banner.style.background = 'linear-gradient(135deg,' + color + '33,' + color + '11)';
+
+  var photoHTML;
+  if (person.photo && person.photo.indexOf('http') === 0) {
+    photoHTML = '<img src="' + person.photo + '" alt="' + person.name + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+  } else {
+    photoHTML = '<div class="photo-initials" style="font-size:26px;font-family:Syne,sans-serif;font-weight:700;background:linear-gradient(135deg,' + color + '33,' + color + '66)">' + getInitials(person.name) + '</div>';
+  }
+
+  banner.innerHTML = '<div class="modal-photo-wrap">' + photoHTML + '</div>';
+
+  var infoRows = '';
+  if (person.location) infoRows += '<div class="info-item"><div class="info-label">📍 Location</div><div class="info-value">' + person.location + '</div></div>';
+  if (person.contact)  infoRows += '<div class="info-item"><div class="info-label">📞 Contact</div><div class="info-value"><a href="tel:' + person.contact + '">' + person.contact + '</a></div></div>';
+  if (person.email)    infoRows += '<div class="info-item"><div class="info-label">✉️ Email</div><div class="info-value"><a href="mailto:' + person.email + '">' + person.email + '</a></div></div>';
+  if (descendants > 0) infoRows += '<div class="info-item"><div class="info-label">👥 Team</div><div class="info-value">' + children.length + ' direct · ' + descendants + ' total</div></div>';
+
+  var socialHTML = '';
+  if (person.linkedin || person.instagram || person.twitter) {
+    socialHTML = '<div class="modal-social">';
+    if (person.linkedin)  socialHTML += '<a href="https://' + person.linkedin  + '" target="_blank" class="social-btn">💼 LinkedIn</a>';
+    if (person.instagram) socialHTML += '<a href="https://instagram.com/' + person.instagram + '" target="_blank" class="social-btn">📸 Instagram</a>';
+    if (person.twitter)   socialHTML += '<a href="https://twitter.com/' + person.twitter + '" target="_blank" class="social-btn">🐦 Twitter</a>';
+    socialHTML += '</div>';
+  }
+
+  var actionsHTML = '<div class="modal-actions">';
+  if (person.email)    actionsHTML += '<a href="mailto:' + person.email + '" class="modal-btn primary">✉️ Email</a>';
+  if (children.length) actionsHTML += '<button class="modal-btn" onclick="closeAndExpand(\'' + person.id + '\')">👥 View Team</button>';
+  if (person.contact)  actionsHTML += '<a href="tel:' + person.contact + '" class="modal-btn">📞 Call</a>';
+  actionsHTML += '</div>';
+
+  document.getElementById('modalBody').innerHTML =
+    '<div class="modal-name">'  + person.name + '</div>' +
+    '<div class="modal-title">' + (person.title || 'Team Member') + '</div>' +
+    '<div class="modal-dept-tag" style="color:' + color + '">' +
+      '<div style="width:8px;height:8px;border-radius:50%;background:' + color + '"></div>' +
+      (person.department || '') +
+      (descendants > 0 ? '<span style="color:var(--muted2);margin-left:4px">· ' + descendants + ' reports</span>' : '') +
+    '</div>' +
+    '<div class="modal-info-grid">' + infoRows + '</div>' +
+    socialHTML + actionsHTML;
+
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeAndExpand(id) {
+  document.getElementById('overlay').classList.remove('open');
+  expandedIds[id] = true;
+  renderTree();
+  window.setTimeout(function() {
+    var card = document.querySelector('.person-card[data-id="' + id + '"]');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+  }, 200);
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('overlay')) {
+    document.getElementById('overlay').classList.remove('open');
+  }
+}
+
+// ─────────────────────────────────────────────
+//  SEARCH
+// ─────────────────────────────────────────────
+function handleSearch(val) {
+  var resultsEl = document.getElementById('searchResults');
+  if (!val.trim()) { resultsEl.classList.remove('show'); return; }
+
+  var q = val.toLowerCase();
+  var matches = [];
+  for (var i = 0; i < people.length; i++) {
+    var p = people[i];
+    if (p.name.toLowerCase().indexOf(q) !== -1 ||
+        p.department.toLowerCase().indexOf(q) !== -1 ||
+        p.title.toLowerCase().indexOf(q) !== -1) {
+      matches.push(p);
+      if (matches.length >= 8) break;
+    }
+  }
+
+  if (!matches.length) { resultsEl.classList.remove('show'); return; }
+
+  var html = '';
+  for (var j = 0; j < matches.length; j++) {
+    var m     = matches[j];
+    var color = getDeptColor(m.department);
+    var initBg = 'background:linear-gradient(135deg,' + color + '33,' + color + '66)';
+    var photoEl = (m.photo && m.photo.indexOf('http') === 0)
+      ? '<img src="' + m.photo + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover">'
+      : '<div style="width:32px;height:32px;border-radius:50%;' + initBg + ';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:Syne,sans-serif">' + getInitials(m.name) + '</div>';
+    html += '<div class="sr-item" onclick="jumpTo(\'' + m.id + '\')">' +
+      '<div class="sr-photo-sm">' + photoEl + '</div>' +
+      '<div><div class="sr-name">' + m.name + '</div>' +
+      '<div class="sr-dept" style="color:' + color + '">' + m.department + (m.title ? ' · ' + m.title : '') + '</div></div>' +
+      '</div>';
+  }
+  resultsEl.innerHTML = html;
+  resultsEl.classList.add('show');
+}
+
+function showSearchResults() {
+  var v = document.getElementById('searchInput').value;
+  if (v.trim()) handleSearch(v);
+}
+
+function hideSearchResults() {
+  document.getElementById('searchResults').classList.remove('show');
+}
+
+function jumpTo(id) {
+  document.getElementById('searchInput').value = '';
+  hideSearchResults();
+
+  // Expand path from root to this person
+  var path = getPathToRoot(id);
+  for (var i = 0; i < path.length; i++) expandedIds[path[i]] = true;
+  renderTree();
+
+  window.setTimeout(function() {
+    var card = document.querySelector('.person-card[data-id="' + id + '"]');
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      card.style.transition = 'box-shadow 0.3s';
+      card.style.boxShadow  = '0 0 0 3px ' + getDeptColor(findPersonById(id).department) + ', 0 16px 48px rgba(0,0,0,0.6)';
+      window.setTimeout(function() { card.style.boxShadow = ''; }, 2500);
+    }
+    var person = findPersonById(id);
+    if (person) openProfile(person);
+  }, 350);
+}
+
+function findPersonById(id) {
+  for (var i = 0; i < people.length; i++) {
+    if (people[i].id === id) return people[i];
+  }
+  return null;
+}
+
+function getPathToRoot(id) {
+  var path = [];
+  var current = findPersonById(id);
+  while (current && current.reportsTo) {
+    path.push(current.reportsTo);
+    current = findPersonById(current.reportsTo);
+  }
+  return path;
+}
+
+// ─────────────────────────────────────────────
+//  BREADCRUMB
+// ─────────────────────────────────────────────
+function updateBreadcrumb() {
+  var bc = document.getElementById('breadcrumb');
+  bc.innerHTML = '<span class="bc-item active">🏠 All Teams</span>';
+}
+
+// ─────────────────────────────────────────────
+//  STATS + LEGEND
+// ─────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('statTotal').textContent = people.length;
+  var deptSet = {};
+  for (var i = 0; i < people.length; i++) {
+    if (people[i].department) deptSet[people[i].department] = true;
+  }
+  var deptCount = Object.keys(deptSet).length;
+  document.getElementById('statDepts').innerHTML = '<strong>' + deptCount + '</strong>&nbsp;departments';
+}
+
+function buildLegend() {
+  var legend = document.getElementById('deptLegend');
+  legend.innerHTML = '<div class="legend-title">Departments</div>';
+  var deptSet = {};
+  for (var i = 0; i < people.length; i++) {
+    if (people[i].department) deptSet[people[i].department] = true;
+  }
+  var depts = Object.keys(deptSet);
+  for (var j = 0; j < depts.length; j++) {
+    var d    = depts[j];
+    var item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = '<div class="legend-dot" style="background:' + getDeptColor(d) + '"></div>' + d;
+    item.setAttribute('data-dept', d);
+    item.onclick = (function(dept) { return function() { filterByDept(dept); }; })(d);
+    legend.appendChild(item);
+  }
+}
+
+function filterByDept(dept) {
+  var members = [];
+  for (var i = 0; i < people.length; i++) {
+    if (people[i].department === dept) members.push(people[i]);
+  }
+  for (var j = 0; j < members.length; j++) {
+    var path = getPathToRoot(members[j].id);
+    for (var k = 0; k < path.length; k++) expandedIds[path[k]] = true;
+    expandedIds[members[j].id] = true;
+  }
+  renderTree();
+  window.setTimeout(function() {
+    if (members.length) {
+      var card = document.querySelector('.person-card[data-id="' + members[0].id + '"]');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    }
+  }, 300);
+}
+
+// ─────────────────────────────────────────────
+//  ZOOM
+// ─────────────────────────────────────────────
+function zoom(factor) {
+  currentScale = Math.min(Math.max(currentScale * factor, 0.25), 2.5);
+  var tw = document.getElementById('treeWrap');
+  tw.style.transform       = 'scale(' + currentScale + ')';
+  tw.style.transformOrigin = 'top center';
+  window.requestAnimationFrame(function() {
+    window.requestAnimationFrame(drawConnectors);
+  });
+}
+
+function resetZoom() {
+  currentScale = 1;
+  var tw = document.getElementById('treeWrap');
+  tw.style.transform = 'scale(1)';
+  window.requestAnimationFrame(function() {
+    window.requestAnimationFrame(drawConnectors);
+  });
+}
+
+// ─────────────────────────────────────────────
+//  SAMPLE DATA
+// ─────────────────────────────────────────────
+function loadSampleData() {
+  var rows = [
+    "id,name,title,department,reports_to,photo,location,contact,email,linkedin,instagram,twitter",
+    "1,Rajeshwar Dutt,Founder and Chairman,Executive,,,Hyderabad,+91-90001-00001,founder@sumantv.com,,,",
+    "2,Venkat Raju,CEO,Executive,1,,Hyderabad,+91-90001-00002,ceo@sumantv.com,,,",
+    "3,Priya Sharma,COO,Executive,1,,Hyderabad,+91-90001-00003,coo@sumantv.com,,,",
+    "4,Arun Kumar,CFO,Finance,1,,Hyderabad,+91-90001-00004,cfo@sumantv.com,,,",
+    "5,Kiran Reddy,Head of Content,Content,2,,Hyderabad,+91-90001-00005,content.head@sumantv.com,,,",
+    "6,Lakshmi Devi,Head of Production,Production,2,,Hyderabad,+91-90001-00006,production.head@sumantv.com,,,",
+    "7,Suresh Babu,Head of Technology,Technology,2,,Hyderabad,+91-90001-00007,tech.head@sumantv.com,,,",
+    "8,Meena Kumari,Head of Marketing,Marketing,2,,Hyderabad,+91-90001-00008,marketing.head@sumantv.com,,,",
+    "9,Ramesh Yadav,Head of HR,Human Resources,3,,Hyderabad,+91-90001-00009,hr.head@sumantv.com,,,",
+    "10,Deepa Nair,Head of Design,Design,3,,Hyderabad,+91-90001-00010,design.head@sumantv.com,,,",
+    "11,Sanjay Gupta,Finance Manager,Finance,4,,Hyderabad,+91-90001-00011,finance.mgr@sumantv.com,,,",
+    "12,Pooja Iyer,Accounts Lead,Finance,4,,Hyderabad,+91-90001-00012,accounts@sumantv.com,,,",
+    "13,Naveen Tej,Content Manager,Content,5,,Hyderabad,+91-90001-00013,content.mgr@sumantv.com,,,",
+    "14,Swapna Reddy,Anchor and Script Lead,Content,5,,Hyderabad,+91-90001-00014,swapna@sumantv.com,,,",
+    "15,Roshan Kumar,Anchor,Content,5,,Hyderabad,+91-90001-00015,roshan@sumantv.com,,,",
+    "16,Nirupama Singh,Anchor,Content,5,,Hyderabad,+91-90001-00016,nirupama@sumantv.com,,,",
+    "18,Sahithi Yoga,Presenter Fitness,Content,13,,Hyderabad,+91-90001-00018,sahithi@sumantv.com,,,",
+    "19,Vineela Kondapalli,Presenter Diet,Content,13,,Hyderabad,+91-90001-00019,vineela@sumantv.com,,,",
+    "20,Vasantha Lakshmi,Presenter Yoga,Content,13,,Hyderabad,+91-90001-00020,vasantha@sumantv.com,,,",
+    "21,Arjun Shetty,Script Writer,Content,14,,Hyderabad,+91-90001-00021,writer1@sumantv.com,,,",
+    "22,Kavitha Menon,Script Writer,Content,14,,Hyderabad,+91-90001-00022,writer2@sumantv.com,,,",
+    "26,Harsha Vardhan,Studio Director,Production,6,,Hyderabad,+91-90001-00026,studio.dir@sumantv.com,,,",
+    "27,Indira Devi,Studio Manager,Production,6,,Hyderabad,+91-90001-00027,studio.mgr@sumantv.com,,,",
+    "28,Jagadish Rao,Camera Lead,Production,26,,Hyderabad,+91-90001-00028,camera.lead@sumantv.com,,,",
+    "29,Kalyan Kumar,Cameraman,Production,28,,Hyderabad,+91-90001-00029,cam1@sumantv.com,,,",
+    "30,Lavanya Devi,Cameraman,Production,28,,Hyderabad,+91-90001-00030,cam2@sumantv.com,,,",
+    "37,Sirisha Rao,Makeup Artist Lead,Production,27,,Hyderabad,+91-90001-00037,makeup.lead@sumantv.com,,,",
+    "38,Tarun Sharma,Makeup Artist,Production,37,,Hyderabad,+91-90001-00038,makeup1@sumantv.com,,,",
+    "40,Vijay Prasad,Edit Lead,Production,6,,Hyderabad,+91-90001-00040,edit.lead@sumantv.com,,,",
+    "41,Wahida Khan,Senior Editor,Production,40,,Hyderabad,+91-90001-00041,editor1@sumantv.com,,,",
+    "42,Xavier Paul,Senior Editor,Production,40,,Hyderabad,+91-90001-00042,editor2@sumantv.com,,,",
+    "43,Yamini Reddy,Editor,Production,40,,Hyderabad,+91-90001-00043,editor3@sumantv.com,,,",
+    "46,Balaji Rao,QC Analyst Lead,Production,6,,Hyderabad,+91-90001-00046,qc.lead@sumantv.com,,,",
+    "47,Chitra Devi,QC Analyst,Production,46,,Hyderabad,+91-90001-00047,qc1@sumantv.com,,,",
+    "48,Dinesh Kumar,QC Analyst,Production,46,,Hyderabad,+91-90001-00048,qc2@sumantv.com,,,",
+    "50,Farid Ahmed,Lead Developer,Technology,7,,Hyderabad,+91-90001-00050,lead.dev@sumantv.com,,,",
+    "51,Geetha Nair,Frontend Developer,Technology,50,,Hyderabad,+91-90001-00051,frontend1@sumantv.com,,,",
+    "52,Hari Prasad,Frontend Developer,Technology,50,,Hyderabad,+91-90001-00052,frontend2@sumantv.com,,,",
+    "53,Indrani Devi,Backend Developer,Technology,50,,Hyderabad,+91-90001-00053,backend1@sumantv.com,,,",
+    "55,Kalpana Rao,DevOps Engineer,Technology,7,,Hyderabad,+91-90001-00055,devops@sumantv.com,,,",
+    "56,Latha Devi,IT Support Lead,Technology,7,,Hyderabad,+91-90001-00056,it.support@sumantv.com,,,",
+    "57,Madhu Babu,IT Support,Technology,56,,Hyderabad,+91-90001-00057,it1@sumantv.com,,,",
+    "59,Ojas Reddy,Social Media Lead,Marketing,8,,Hyderabad,+91-90001-00059,social.lead@sumantv.com,,,",
+    "60,Padmaja Rao,YT Manager,Marketing,59,,Hyderabad,+91-90001-00060,yt.mgr@sumantv.com,,,",
+    "61,Rani Devi,Instagram Manager,Marketing,59,,Hyderabad,+91-90001-00061,ig.mgr@sumantv.com,,,",
+    "62,Santosh Kumar,Facebook Manager,Marketing,59,,Hyderabad,+91-90001-00062,fb.mgr@sumantv.com,,,",
+    "63,Teja Reddy,Content Strategist,Marketing,8,,Hyderabad,+91-90001-00063,strategist@sumantv.com,,,",
+    "64,Usha Rani,SEO Lead,Marketing,8,,Hyderabad,+91-90001-00064,seo@sumantv.com,,,",
+    "65,Vamsi Krishna,SEO Analyst,Marketing,64,,Hyderabad,+91-90001-00065,seo1@sumantv.com,,,",
+    "67,Xena Devi,Brand Manager,Marketing,8,,Hyderabad,+91-90001-00067,brand@sumantv.com,,,",
+    "68,Yogesh Sharma,HR Manager,Human Resources,9,,Hyderabad,+91-90001-00068,hr.mgr@sumantv.com,,,",
+    "69,Zara Khan,HR Executive,Human Resources,68,,Hyderabad,+91-90001-00069,hr1@sumantv.com,,,",
+    "70,Aakash Rao,HR Executive,Human Resources,68,,Hyderabad,+91-90001-00070,hr2@sumantv.com,,,",
+    "71,Bhavana Devi,Talent Acquisition,Human Resources,9,,Hyderabad,+91-90001-00071,talent@sumantv.com,,,",
+    "72,Chandu Kumar,UI UX Lead,Design,10,,Hyderabad,+91-90001-00072,uiux.lead@sumantv.com,,,",
+    "73,Dhanushka Rao,UI Designer,Design,72,,Hyderabad,+91-90001-00073,ui1@sumantv.com,,,",
+    "74,Eshwar Reddy,UI Designer,Design,72,,Hyderabad,+91-90001-00074,ui2@sumantv.com,,,",
+    "75,Falguni Devi,Graphic Designer,Design,10,,Hyderabad,+91-90001-00075,graphic1@sumantv.com,,,",
+    "76,Ganesh Kumar,Graphic Designer,Design,10,,Hyderabad,+91-90001-00076,graphic2@sumantv.com,,,",
+    "77,Hema Reddy,Thumbnail Artist,Design,10,,Hyderabad,+91-90001-00077,thumb1@sumantv.com,,,",
+    "80,Kalyani Devi,Motion Graphics,Design,10,,Hyderabad,+91-90001-00080,motion@sumantv.com,,,"
+  ];
+  parsePeopleCSV(rows.join('\n'));
+}
+
+// ─────────────────────────────────────────────
+//  GOOGLE SHEETS SYNC
+// ─────────────────────────────────────────────
+var savedSheetsUrl = '';
+
+function toCSVUrl(url) {
+  url = url.trim();
+  // Already a proper CSV export URL
+  if (url.indexOf('output=csv') !== -1 || url.indexOf('/pub?') !== -1) return url;
+  // Convert /edit or /view share link → export CSV URL
+  var match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    var id  = match[1];
+    var gidMatch = url.match(/gid=(\d+)/);
+    var gid = gidMatch ? gidMatch[1] : '0';
+    return 'https://docs.google.com/spreadsheets/d/' + id + '/export?format=csv&gid=' + gid;
+  }
+  return url;
+}
+
+function toggleSheetsPanel() {
+  var panel = document.getElementById('sheetsPanel');
+  if (panel.classList.contains('open')) {
+    panel.classList.remove('open');
+  } else {
+    panel.classList.add('open');
+    document.getElementById('sheetsUrlInput').focus();
+  }
+}
+
+function connectSheets() {
+  var input = document.getElementById('sheetsUrlInput');
+  var url   = input.value.trim();
+  if (!url) {
+    showToast('error', '⚠️ Please paste your Google Sheets URL first');
+    return;
+  }
+  savedSheetsUrl = toCSVUrl(url);
+  try { localStorage.setItem('stv_org_sheets_url', savedSheetsUrl); } catch(e) {}
+  fetchSheets(function(ok) {
+    if (ok) {
+      document.getElementById('sheetsClearBtn').style.display = 'inline-flex';
+      document.getElementById('sheetsPanelStatus').textContent = '● Connected';
+      document.getElementById('sheetsPanelStatus').style.color = '#22c55e';
+    }
+  });
+}
+
+function clearSheets() {
+  savedSheetsUrl = '';
+  try { localStorage.removeItem('stv_org_sheets_url'); } catch(e) {}
+  document.getElementById('sheetsUrlInput').value = '';
+  document.getElementById('sheetsClearBtn').style.display = 'none';
+  document.getElementById('sheetsPanelStatus').textContent = 'Not connected';
+  document.getElementById('sheetsPanelStatus').style.color = '';
+  document.getElementById('syncBtn').classList.remove('visible');
+  showToast('success', '✓ Google Sheets connection cleared');
+}
+
+function syncFromSheets() {
+  if (!savedSheetsUrl) {
+    showToast('error', '⚠️ No sheet connected yet. Open the splash screen to connect.');
+    return;
+  }
+  fetchSheets(null);
+}
+
+function fetchSheets(callback) {
+  var btn  = document.getElementById('syncBtn');
+  var icon = document.getElementById('syncIcon');
+  btn.classList.add('syncing');
+  if (icon) icon.textContent = '…';
+  showToast('success', '⟳ Fetching data from Google Sheets…');
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', savedSheetsUrl, true);
+  xhr.onload = function() {
+    btn.classList.remove('syncing');
+    if (icon) icon.textContent = '⟳';
+    if (xhr.status >= 200 && xhr.status < 300) {
+      parsePeopleCSV(xhr.responseText);
+      var now = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      showToast('success', '✓ Synced from Google Sheets · ' + now);
+      document.getElementById('syncBtn').classList.add('visible');
+      if (callback) callback(true);
+    } else {
+      showToast('error', '✗ Sync failed (' + xhr.status + ') — check your URL and sharing settings');
+      if (callback) callback(false);
+    }
+  };
+  xhr.onerror = function() {
+    btn.classList.remove('syncing');
+    if (icon) icon.textContent = '⟳';
+    showToast('error', '✗ Network error — make sure the sheet is published publicly');
+    if (callback) callback(false);
+  };
+  xhr.send();
+}
+
+// ─────────────────────────────────────────────
+//  TOAST
+// ─────────────────────────────────────────────
+var toastTimer = null;
+function showToast(type, message) {
+  var toast = document.getElementById('syncToast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.className   = 'sync-toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() {
+    toast.classList.remove('show');
+  }, type === 'error' ? 6000 : 4000);
+}
+
+// ─────────────────────────────────────────────
+//  DRAG TO PAN
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // Restore saved Google Sheets URL
+  try {
+    var saved = localStorage.getItem('stv_org_sheets_url');
+    if (saved) {
+      savedSheetsUrl = saved;
+      document.getElementById('sheetsUrlInput').value = saved;
+      document.getElementById('sheetsClearBtn').style.display = 'inline-flex';
+      document.getElementById('sheetsPanelStatus').textContent = '● Connected';
+      document.getElementById('sheetsPanelStatus').style.color = '#22c55e';
+      document.getElementById('syncBtn').classList.add('visible');
+      // Auto-sync on load
+      fetchSheets(null);
+    }
+  } catch(e) {}
+
+  var cv = document.getElementById('canvas');
+  if (!cv) return;
+
+  cv.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.person-card')) return;
+    isDragging    = true;
+    dragStartX    = e.pageX - cv.offsetLeft;
+    dragStartY    = e.pageY - cv.offsetTop;
+    dragScrollLeft  = cv.scrollLeft;
+    dragScrollTop   = cv.scrollTop;
+    cv.style.cursor = 'grabbing';
+  });
+  cv.addEventListener('mouseleave', function() { isDragging = false; cv.style.cursor = 'grab'; });
+  cv.addEventListener('mouseup',    function() { isDragging = false; cv.style.cursor = 'grab'; });
+  cv.addEventListener('mousemove',  function(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    cv.scrollLeft = dragScrollLeft - (e.pageX - cv.offsetLeft - dragStartX);
+    cv.scrollTop  = dragScrollTop  - (e.pageY - cv.offsetTop  - dragStartY);
+  });
+
+  // Drag-and-drop CSV onto the splash zone
+  var dz = document.getElementById('dropZone');
+  if (dz) {
+    dz.addEventListener('dragover',  function(e) { e.preventDefault(); dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', function()  { dz.classList.remove('drag-over'); });
+    dz.addEventListener('drop',      function(e) {
+      e.preventDefault();
+      dz.classList.remove('drag-over');
+      var f = e.dataTransfer.files[0];
+      if (f) handleCSV({ target: { files: [f], value: '' } });
+    });
+  }
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('overlay').classList.remove('open');
+});
+</script>
+</body>
+</html>

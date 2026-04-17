@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SumanTV Health — Video Upload SEO Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0d;
+    --surface: #111a14;
+    --surface2: #162019;
+    --border: #1f3024;
+    --accent: #22c55e;
+    --accent2: #16a34a;
+    --accent-glow: rgba(34,197,94,0.15);
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e8f5ec;
+    --muted: #5a7a62;
+    --tag-bg: #0f1f13;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .page-wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+  }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
+    50% { opacity: 0.6; box-shadow: 0 0 18px var(--accent); }
+  }
+
+  .brand-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text);
+  }
+
+  .page-title span { color: var(--accent); }
+
+  .header-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .meta-chip {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .progress-bar-outer {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  .progress-count {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+    min-width: 48px;
+    text-align: right;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .section-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    background: var(--accent-glow);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 4px;
+    padding: 2px 7px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .section-icon {
+    margin-left: auto;
+    font-size: 16px;
+    opacity: 0.6;
+  }
+
+  /* Items grid */
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+
+  .item:hover { border-color: var(--muted); }
+
+  .item.checked {
+    background: var(--tag-bg);
+    border-color: rgba(34,197,94,0.25);
+  }
+
+  .item.checked .item-text {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--muted);
+  }
+
+  .checkbox {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    background: transparent;
+  }
+
+  .item.checked .checkbox {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .checkmark {
+    opacity: 0;
+    transition: opacity 0.15s;
+    color: #0a0f0d;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .item.checked .checkmark { opacity: 1; }
+
+  .item-content { flex: 1; }
+
+  .item-text {
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text);
+    transition: color 0.2s;
+    line-height: 1.5;
+  }
+
+  .item-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  .badge {
+    flex-shrink: 0;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-top: 2px;
+  }
+
+  .badge-must {
+    background: rgba(239,68,68,0.12);
+    color: var(--danger);
+    border: 1px solid rgba(239,68,68,0.2);
+  }
+
+  .badge-high {
+    background: rgba(245,158,11,0.1);
+    color: var(--warn);
+    border: 1px solid rgba(245,158,11,0.2);
+  }
+
+  .badge-tip {
+    background: rgba(34,197,94,0.08);
+    color: var(--accent);
+    border: 1px solid rgba(34,197,94,0.15);
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0 20px;
+  }
+
+  /* Reset button */
+  .reset-btn {
+    display: block;
+    margin: 40px auto 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 9px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* All done banner */
+  .done-banner {
+    display: none;
+    background: linear-gradient(135deg, #0f2917, #132d1a);
+    border: 1px solid rgba(34,197,94,0.3);
+    border-radius: 10px;
+    padding: 20px 24px;
+    text-align: center;
+    margin-top: 28px;
+  }
+
+  .done-banner.visible { display: block; }
+
+  .done-emoji { font-size: 28px; display: block; margin-bottom: 8px; }
+
+  .done-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .done-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="header">
+    <div class="brand-row">
+      <div class="brand-dot"></div>
+      <span class="brand-label">SumanTV Health Network</span>
+    </div>
+    <h1 class="page-title">Video Upload <span>SEO Checklist</span></h1>
+    <div class="header-meta">
+      <span class="meta-chip">30 Health Channels</span>
+      <span class="meta-chip">YouTube Optimisation</span>
+      <span class="meta-chip">Telugu Language Content</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <span class="progress-label">Upload Progress</span>
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="progressBar"></div>
+    </div>
+    <span class="progress-count" id="progressCount">0 / 0</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Pre-Upload Preparation</span>
+      <span class="section-icon">📋</span>
+    </div>
+    <div class="items">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Identify primary keyword for the video topic</div>
+          <div class="item-hint">Use Telugu health search terms — e.g. "మధుమేహం చికిత్స", "బీపీ నియంత్రణ"</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Research 5–8 secondary / LSI keywords before writing metadata</div>
+          <div class="item-hint">Use YouTube Search Autocomplete, Google Trends (India), and TubeBuddy/VidIQ</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Confirm video is assigned to the correct channel (avoid keyword cannibalisation across 30 channels)</div>
+          <div class="item-hint">Check the channel keyword cluster assignment sheet</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Check if the same topic has been covered in last 60 days on any channel</div>
+          <div class="item-hint">Prevents internal competition — differentiate angle or update if necessary</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Verify video file is exported at minimum 1080p, MP4 (H.264)</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Title Optimisation</span>
+      <span class="section-icon">🏷️</span>
+    </div>
+    <div class="items">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Primary keyword appears in the first 40 characters of the title</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Title is between 50–70 characters total (not truncated in search results)</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Title includes a clear benefit or hook (number, question, result)</div>
+          <div class="item-hint">e.g. "7 రోజుల్లో బీపీ తగ్గించే 5 మార్గాలు | Dr. XYZ"</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Doctor or expert name included in title if applicable</div>
+          <div class="item-hint">Boosts authority — especially for hospital partner content</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">No clickbait — title accurately reflects video content (YMYL compliance)</div>
+          <div class="item-hint">Health content is YMYL — misleading titles risk ranking suppression</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Description</span>
+      <span class="section-icon">📝</span>
+    </div>
+    <div class="items">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">First 2–3 lines include primary keyword and a compelling summary (visible before "Show more")</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Description is 300–500 words minimum, naturally including 3–5 secondary keywords</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Timestamps / chapters added for videos longer than 4 minutes</div>
+          <div class="item-hint">Improves watch time and enables Google rich snippet chapters</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Doctor / hospital name and credentials mentioned in description</div>
+          <div class="item-hint">Builds E-E-A-T signals for health content</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Medical disclaimer included (e.g. "ఈ వీడియో కేవలం సమాచారం కోసం మాత్రమే...")</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Channel subscribe CTA and 2–3 related video links added at end of description</div>
+        </div>
+        <span class="badge badge-tip">Tip</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">WhatsApp / appointment booking link added for hospital partner videos</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Tags & Categories</span>
+      <span class="section-icon">🔖</span>
+    </div>
+    <div class="items">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">First tag is the exact primary keyword (Telugu)</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">15–20 total tags added — mix of broad (health), mid (diabetes), and long-tail (type 2 diabetes diet Telugu)</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Channel brand tag added (e.g. "SumanTV Health") on all videos</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Correct category selected: "People & Blogs" or "Education" for health advice content</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Thumbnail</span>
+      <span class="section-icon">🖼️</span>
+    </div>
+    <div class="items">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Custom thumbnail uploaded (1280×720px, JPG/PNG under 2MB)</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Thumbnail text is readable on mobile (large font, high contrast)</div>
+          <div class="item-hint">80%+ of Telugu health viewers watch on mobile</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Doctor's face or patient result visible (human faces increase CTR)</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Channel logo / watermark present on thumbnail</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Cards, End Screens & Playlists</span>
+      <span class="section-icon">🎬</span>
+    </div>
+    <div class="items">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Video added to the correct playlist immediately on upload</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">End screen added (20 seconds) — at least 1 related video + subscribe button</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">2–3 Info Cards added at relevant moments linking to related videos or playlists</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">Upload Settings</span>
+      <span class="section-icon">⚙️</span>
+    </div>
+    <div class="items">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Language set to Telugu in video details</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Subtitles / captions uploaded or auto-generated and reviewed</div>
+          <div class="item-hint">Captions boost accessibility and help YouTube index spoken keywords</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Made for Kids set to "No" for all health advice videos</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Paid promotion disclosure checked if hospital is a paying partner</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Schedule at peak audience time — 7:00–9:00 AM IST or 6:00–9:00 PM IST</div>
+          <div class="item-hint">Check channel analytics for each channel's top active hours</div>
+        </div>
+        <span class="badge badge-tip">Tip</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">Post-Upload (First 48 Hours)</span>
+      <span class="section-icon">🚀</span>
+    </div>
+    <div class="items">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Video shared on SumanTV Health WhatsApp broadcast list & community tab</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Short clip (Reel/Short) created and cross-posted within 24 hours</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Pinned comment with key takeaway + subscribe CTA posted by team</div>
+        </div>
+        <span class="badge badge-high">High</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Check YouTube Studio at 24h — if CTR < 3% or AVD < 40%, flag for thumbnail/title A/B test</div>
+        </div>
+        <span class="badge badge-tip">Tip</span>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="item-content">
+          <div class="item-text">Log video in the channel tracker sheet (title, upload date, keyword, views @ 7 days)</div>
+        </div>
+        <span class="badge badge-must">Must</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="done-banner" id="doneBanner">
+    <span class="done-emoji">✅</span>
+    <div class="done-text">Checklist Complete — Video is SEO Ready!</div>
+    <div class="done-sub">All items checked. This video is optimised for Telugu health search. Ready to publish.</div>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Reset Checklist</button>
+
+</div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('checked');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.item');
+    const done = document.querySelectorAll('.item.checked');
+    const total = all.length;
+    const count = done.length;
+    const pct = total ? (count / total) * 100 : 0;
+
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressCount').textContent = count + ' / ' + total;
+
+    const banner = document.getElementById('doneBanner');
+    if (count === total && total > 0) {
+      banner.classList.add('visible');
+    } else {
+      banner.classList.remove('visible');
+    }
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.item').forEach(el => el.classList.remove('checked'));
+    updateProgress();
+  }
+
+  // Init progress count
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOD Metadata Ingestion Engine</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .dashboard-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #1a252f;
+            font-size: 24px;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-size: 14px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+        .btn-generate {
+            background-color: #2b6cb0;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 40px;
+            transition: background-color 0.2s ease;
+        }
+        .btn-generate:hover {
+            background-color: #2c5282;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <h1>Content Metadata Ingestion Form</h1>
+    
+    <form id="metadataForm">
+        
+        <h3>1. Provider Information</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="providerName">Provider Name</label>
+                <input type="text" id="providerName" value="Cinestar" required>
+            </div>
+            <div class="form-group">
+                <label for="providerId">Provider ID</label>
+                <input type="text" id="providerId" value="cinestar.hr" required>
+            </div>
+            <div class="form-group">
+                <label for="assetBaseId">Asset Base ID</label>
+                <input type="text" id="assetBaseId" value="CIST20260709094532" required>
+            </div>
+            <div class="form-group">
+                <label for="creationDate">Creation Date</label>
+                <input type="date" id="creationDate" value="2026-07-09" required>
+            </div>
+        </div>
+
+        <h3>2. Title Metadata</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="languageCode">Primary Language (ISO)</label>
+                <input type="text" id="languageCode" value="SLV" required>
+            </div>
+            <div class="form-group">
+                <label for="originalTitle">Original Title</label>
+                <input type="text" id="originalTitle" value="Brave The Dark" required>
+            </div>
+            <div class="form-group">
+                <label for="localizedTitle">Localized Title</label>
+                <input type="text" id="localizedTitle" value="Poglej temi v oči" required>
+            </div>
+            <div class="form-group">
+                <label for="year">Release Year</label>
+                <input type="number" id="year" value="2025" required>
+            </div>
+            <div class="form-group full-width">
+                <label for="summary">Synopsis</label>
+                <textarea id="summary" required>Najstniški brezdomec Nate želi zbrati pogum, da bi se soočil s temo iz svoje preteklosti.</textarea>
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre</label>
+                <input type="text" id="genre" value="Drama" required>
+            </div>
+            <div class="form-group">
+                <label for="suggestedPrice">Suggested Price</label>
+                <input type="text" id="suggestedPrice" value="3.50" required>
+            </div>
+        </div>
+
+        <h3>3. Technical Asset Names</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="movieFile">Movie File Name (.mpg)</label>
+                <input type="text" id="movieFile" value="FLM010209 BRAVE THE DARK.mpg" required>
+            </div>
+            <div class="form-group">
+                <label for="posterFile">Poster File Name (.jpg)</label>
+                <input type="text" id="posterFile" value="010209_TVOD_B1_SLO.jpg" required>
+            </div>
+            <div class="form-group">
+                <label for="trailerFile">Trailer File Name (.mpg)</label>
+                <input type="text" id="trailerFile" value="TRA010209 BRAVE THE DARK.mpg" required>
+            </div>
+            <div class="form-group">
+                <label for="runTime">Total Runtime (HH:MM:SS)</label>
+                <input type="text" id="runTime" value="01:46:43" required>
+            </div>
+        </div>
+
+        <button type="button" class="btn-generate" onclick="generateXML()">Generate & Download XML</button>
+    </form>
+</div>
+
+<script>
+    function generateXML() {
+        // Fetch values from the DOM
+        const providerName = document.getElementById('providerName').value;
+        const providerId = document.getElementById('providerId').value;
+        const assetBaseId = document.getElementById('assetBaseId').value;
+        const creationDate = document.getElementById('creationDate').value;
+        
+        const languageCode = document.getElementById('languageCode').value;
+        const originalTitle = document.getElementById('originalTitle').value;
+        const localizedTitle = document.getElementById('localizedTitle').value;
+        const year = document.getElementById('year').value;
+        const summary = document.getElementById('summary').value;
+        const genre = document.getElementById('genre').value;
+        const suggestedPrice = document.getElementById('suggestedPrice').value;
+
+        const movieFile = document.getElementById('movieFile').value;
+        const posterFile = document.getElementById('posterFile').value;
+        const trailerFile = document.getElementById('trailerFile').value;
+        const runTime = document.getElementById('runTime').value;
+        
+        // Calculate Brief Title & Display Runtime for mappings
+        const briefTitle = localizedTitle.substring(0, 16) + (localizedTitle.length > 16 ? '...' : '');
+        const displayRunTime = runTime.substring(0, 5); // Grabs HH:MM
+
+        // Construct the XML payload string
+        const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<ADI>
+  <Metadata>
+    <AMS Asset_Class="package" Product="" Asset_Name="" Description="" Provider="${providerName}" Provider_ID="${providerId}" Asset_ID="${assetBaseId}01" Creation_Date="${creationDate}" Version_Major="1" Version_Minor="0" Verb="" />
+    <App_Data App="TVOD" Name="Metadata_Spec_Version" Value="CableLabsVOD1.1" />
+  </Metadata>
+  <Asset>
+    <Metadata>
+      <AMS Asset_Class="title" Product="" Asset_Name="" Description=" title" Provider="${providerName}" Provider_ID="${providerId}" Asset_ID="${assetBaseId}02" Creation_Date="${creationDate}" Version_Major="1" Version_Minor="0" Verb="" />
+      <App_Data App="TVOD" Name="Title" Language="${languageCode}" Value="${localizedTitle}" />
+      <App_Data App="TVOD" Name="Original_Title" Value="${originalTitle}" />
+      <App_Data App="TVOD" Name="Title_Brief" Language="${languageCode}" Value="${briefTitle}" />
+      <App_Data App="TVOD" Name="Summary_Medium" Language="${languageCode}" Value="${summary}" />
+      <App_Data App="TVOD" Name="Summary_Long" Language="${languageCode}" Value="${summary}" />
+      <App_Data App="TVOD" Name="Rating" Value="12" />
+      <App_Data App="TVOD" Name="Run_Time" Value="${runTime}" />
+      <App_Data App="TVOD" Name="Display_Run_Time" Value="${displayRunTime}" />
+      <App_Data App="TVOD" Name="Year" Value="${year}" />
+      <App_Data App="TVOD" Name="Genre" Value="${genre}" />
+      <App_Data App="TVOD" Name="Suggested_Price" Value="${suggestedPrice}" />
+    </Metadata>
+    <Asset>
+      <Metadata>
+        <AMS Asset_Class="movie" Product="TVOD" Asset_Name="" Description=" movie" Provider="${providerName}" Provider_ID="${providerId}" Asset_ID="${assetBaseId}03" Creation_Date="${creationDate}" Version_Major="1" Version_Minor="0" Verb="" />
+        <App_Data App="TVOD" Name="Type" Value="movie" />
+      </Metadata>
+      <Content Value="${movieFile}" />
+    </Asset>
+    <Asset>
+      <Metadata>
+        <AMS Asset_Class="poster" Product="" Asset_Name="" Description=" poster" Provider="${providerName}" Provider_ID="${providerId}" Asset_ID="${assetBaseId}04" Creation_Date="${creationDate}" Version_Major="1" Version_Minor="0" Verb="" />
+        <App_Data App="TVOD" Name="Type" Value="poster" />
+      </Metadata>
+      <Content Value="${posterFile}" />
+    </Asset>
+    <Asset>
+      <Metadata>
+        <AMS Asset_Class="preview" Product="TVOD" Asset_Name="" Description=" preview" Provider="${providerName}" Provider_ID="${providerId}" Asset_ID="${assetBaseId}05" Creation_Date="${creationDate}" Version_Major="1" Version_Minor="0" Verb="" />
+        <App_Data App="TVOD" Name="Type" Value="preview" />
+      </Metadata>
+      <Content Value="${trailerFile}" />
+    </Asset>
+  </Asset>
+</ADI>`;
+
+        // Trigger Download File Pipeline
+        const blob = new Blob([xmlContent], { type: "text/xml" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `ADI_${assetBaseId}.xml`;
+        document.body.appendChild(a);
+        a.click();
+        
+        // Cleanup
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+</body>
+</html>
